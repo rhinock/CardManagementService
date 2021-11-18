@@ -1,10 +1,10 @@
 ﻿# Card Management Service
 
 - Create and set up a template project
-- Setting up the configuration from file and environment variables
-- Middleware for logging requests.
-- Middleware with methods for adding and adding cards for user.
-- Data is stored in memory.
+- Set up the configuration from file and environment variables
+- Middleware for logging requests
+- Middleware for adding and getting cards for user
+- Store data in memory
 - Card model:
   - CVC
   - Pan (card number)
