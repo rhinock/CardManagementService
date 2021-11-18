@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebApplication8.Config
+namespace CMS.UI.Config
 {
     public class MyConfig
     {

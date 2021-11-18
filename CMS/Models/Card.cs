@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApplication8.Models
+namespace CMS.UI.Models
 {
     public class Card
     {

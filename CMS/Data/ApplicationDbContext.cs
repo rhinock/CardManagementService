@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using WebApplication8.Models;
+using CMS.UI.Models;
 
-namespace WebApplication8.Data
+namespace CMS.UI.Data
 {
     public class ApplicationDbContext : DbContext
     {

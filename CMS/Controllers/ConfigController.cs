@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using WebApplication8.Config;
+using CMS.UI.Config;
 
-namespace WebApplication8.Controllers
+namespace CMS.UI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

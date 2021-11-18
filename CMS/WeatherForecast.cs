@@ -1,6 +1,6 @@
 using System;
 
-namespace WebApplication8
+namespace CMS.UI
 {
     public class WeatherForecast
     {

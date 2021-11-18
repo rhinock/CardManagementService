@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using WebApplication8.Data;
-using WebApplication8.Models;
+using CMS.UI.Data;
+using CMS.UI.Models;
 
-namespace WebApplication8.Middleware
+namespace CMS.UI.Middleware
 {
     public class ConventionalMiddleware
     {

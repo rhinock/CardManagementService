@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApplication8.Data;
-using WebApplication8.Models;
+using CMS.UI.Data;
+using CMS.UI.Models;
 
-namespace WebApplication8.Controllers
+namespace CMS.UI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

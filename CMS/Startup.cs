@@ -7,12 +7,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using WebApplication8.Config;
-using WebApplication8.Data;
-using WebApplication8.Middleware;
-using WebApplication8.Models;
+using CMS.UI.Config;
+using CMS.UI.Data;
+using CMS.UI.Middleware;
+using CMS.UI.Models;
 
-namespace WebApplication8
+namespace CMS.UI
 {
     public class Startup
     {
@@ -34,7 +34,7 @@ namespace WebApplication8
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApplication8", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CMS", Version = "v1" });
             });
 
             // Add configuration section here
@@ -61,7 +61,7 @@ namespace WebApplication8
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApplication8 v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CMS v1"));
             }
 
             if (env.IsStaging())
