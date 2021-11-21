@@ -38,13 +38,5 @@ namespace CMS.UI.Middleware
 
             await _next(context);
         }
-
-        // [HttpPost]
-        //public async Task InvokeAsync(HttpContext context, ApplicationDbContext dbContext, Card card)
-        //{
-        //    await dbContext.AddAsync(card);
-        //    await dbContext.SaveChangesAsync();
-        //    await _next(context);
-        //}
     }
 }

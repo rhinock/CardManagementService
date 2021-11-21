@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Threading.Tasks;
 using CMS.UI.Data;
-using CMS.UI.Models;
 
 namespace CMS.UI.Middleware
 {
@@ -15,31 +13,16 @@ namespace CMS.UI.Middleware
         {
             _db = db;
         }
-
-        //public async Task InvokeAsync(HttpContext context, RequestDelegate next)
-        //{
-        //    var keyValue = context.Request.Query["FactoryActivatedMiddleware"];
-
-        //    if (!string.IsNullOrWhiteSpace(keyValue))
-        //    {
-        //        _db.Add(new Card()
-        //        {
-        //            Cvc = "301",
-        //            Expire = DateTime.UtcNow.AddYears(1),
-        //            IsDefault = true,
-        //            Name = keyValue,
-        //            Pan = "0000 0000 0000 0301",
-        //            UserId = Guid.NewGuid()
-        //        });
-
-        //        await _db.SaveChangesAsync();
-        //    }
-
-        //    await next(context);
-        //}
-
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+            if (context.Request.Method == "GET" &&
+                context.Request.Query.TryGetValue("cardName", out var cardName))
+            {
+                var card = await _db.Cards.FirstOrDefaultAsync(c => c.Name == cardName);
+                await context.Response.WriteAsJsonAsync(card);
+                return;
+            }
+
             var keyValue = context.Request.Query["FactoryActivatedMiddleware"];
 
             if (!string.IsNullOrWhiteSpace(keyValue))

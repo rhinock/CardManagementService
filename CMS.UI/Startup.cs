@@ -4,9 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
 using CMS.UI.Config;
 using CMS.UI.Data;
 using CMS.UI.Middleware;
@@ -48,12 +46,6 @@ namespace CMS.UI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //LoggerFactory.Create(builder => builder.AddConsole());
-            //LoggerFactory.Create(builder => builder.AddDebug());
-
-            //var context = app.ApplicationServices.GetService<ApplicationDbContext>();
-            //AddTestData(context);
-
             app.UseConventionalMiddleware();
             app.UseFactoryActivatedMiddleware();
 
