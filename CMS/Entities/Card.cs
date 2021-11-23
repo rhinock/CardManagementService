@@ -5,19 +5,25 @@ namespace CMS.Entities
 {
     public class Card
     {
+        [Key]
+        [Required]
+        public Guid Id { get; set; }
+
         [Required]
         [StringLength(3)]
         public string Cvc { get; set; }
 
         [Required]
-        [Key]
         [RegularExpression(@"^\d{4}\s*\d{4}\s*\d{4}\s*\d{4}$", ErrorMessage = "Card Number is invalid")]
         public string Pan { get; set; }
 
+        // [Required]
+        // [DataType(DataType.Date)]
+        // [DisplayFormat(DataFormatString = "{0:MM/YY")]
+        // public DateTime Expire { get; set; }
+
         [Required]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/YY")]
-        public DateTime Expire { get; set; }
+        public Expire Expire { get; set; }
 
         [Required]
         public string Name { get; set; }

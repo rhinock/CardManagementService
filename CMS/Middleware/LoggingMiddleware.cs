@@ -17,7 +17,12 @@ namespace CMS.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            _logger.LogInformation(context.Request.Path.Value);
+            _logger.LogInformation(
+                $"Headers: {context.Request?.Headers}\n" +
+                $"Query: {context.Request?.Query}\n" +
+                $"Body: {context.Request?.Body}\n" +
+                $"ContentType: {context.Request?.ContentType}");
+
             await _next(context);
         }
     }
