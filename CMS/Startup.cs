@@ -7,10 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -94,7 +92,7 @@ namespace CMS
                                 Cvc = c.GetValue<string>("Cvc"),
                                 Pan = c.GetValue<string>("Pan"),
                                 Expire = new Expire(c.GetValue<int>("Expire:Month"), c.GetValue<int>("Expire:Year")),
-                                Name = c.GetValue<string>("Name"),
+                                Name = $"{AppConfiguration["ASPNETCORE_ENVIRONMENT"]}_{c.GetValue<string>("Name")}",
                                 IsDefault = c.GetValue<bool>("IsDefault"),
                                 UserId = c.GetValue<Guid>("UserId")
                             })
