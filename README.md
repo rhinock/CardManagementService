@@ -13,7 +13,7 @@
     - Month
     - Year
   - Name (card name, user-defined)
-  - IsDefault (whether the card is default paymend card)
+  - IsDefault (whether the card is default payment card)
   - UserId
 
 ## [Use multiple environments in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-5.0)
