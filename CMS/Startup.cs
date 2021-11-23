@@ -85,7 +85,6 @@ namespace CMS
                 {
                     CardCollection.Cards = AppConfiguration.GetSection("Cards")
                             .GetChildren()
-                            .ToList()
                             .Select(c => new Card()
                             {
                                 Id = c.GetValue<Guid>("Id"),
