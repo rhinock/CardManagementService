@@ -97,6 +97,8 @@ namespace CMS
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            app.UseReDoc(c => { c.RoutePrefix = "docs"; });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -106,7 +108,7 @@ namespace CMS
 
             app.Run(context =>
             {
-                context.Response.Redirect("/swagger/index.html");
+                context.Response.Redirect("/docs");
                 return Task.FromResult(0);
             });
         }
