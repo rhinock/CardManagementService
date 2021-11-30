@@ -12,6 +12,7 @@ using System.IO;
 using System.Collections.Generic;
 using Microsoft.OpenApi.Models;
 using System.Threading.Tasks;
+using CMS.Enums;
 
 namespace CMS
 {
@@ -98,6 +99,23 @@ namespace CMS
             app.UseSwaggerUI();
 
             app.UseReDoc(c => { c.RoutePrefix = "docs"; });
+
+            app.Use(async (context, func) =>
+            {
+                if (!context.Response.Headers.TryGetValue("API-KEY", out var key) || !key.Equals("secret-api-key"))
+                {
+                    context.Response.StatusCode = 401;
+                    await context.Response.WriteAsJsonAsync(
+                        new ApiError()
+                        {
+                            Result = BusinessResult.Unauthorized,
+                            Message = "Invalid api key"
+                        });
+                    return;
+                }
+
+                await func();
+            });
 
             app.UseEndpoints(endpoints =>
             {
