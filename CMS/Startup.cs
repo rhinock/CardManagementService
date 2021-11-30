@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Collections.Generic;
+using Microsoft.OpenApi.Models;
+using System.Threading.Tasks;
 
 namespace CMS
 {
@@ -36,6 +38,39 @@ namespace CMS
             services.AddControllersWithViews();
 
             services.Configure<List<Card>>(Configuration);
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo() { Title = "CMS" });
+
+                var filePath = Path.Combine(AppContext.BaseDirectory, $"{nameof(CMS)}.xml");
+                c.IncludeXmlComments(filePath);
+
+                c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme()
+                {
+                    Type = SecuritySchemeType.ApiKey,
+                    In = ParameterLocation.Header,
+                    Name = "API-KEY",
+                    Description = "Api key auth"
+                });
+
+                var key = new OpenApiSecurityScheme()
+                {
+                    Reference = new OpenApiReference()
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "ApiKey"
+                    },
+                    In = ParameterLocation.Header
+                };
+
+                var requirement = new OpenApiSecurityRequirement
+                {
+                    { key, new List<string>() }
+                };
+
+                c.AddSecurityRequirement(requirement);
+            });
         }
 
         /// <summary>
@@ -59,6 +94,9 @@ namespace CMS
 
             app.UseRouting();
 
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -66,10 +104,10 @@ namespace CMS
                     pattern: "{controller=Card}/{action=GetCard}/{id?}");
             });
 
-            app.Run(async context =>
+            app.Run(context =>
             {
-                context.Response.ContentType = "text/html";
-                await context.Response.WriteAsync("Home Page");
+                context.Response.Redirect("/swagger/index.html");
+                return Task.FromResult(0);
             });
         }
     }
