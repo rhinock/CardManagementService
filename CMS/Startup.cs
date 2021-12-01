@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using System.Threading.Tasks;
 using CMS.Enums;
 using System.Text.Json;
+using CMS.Filters;
 
 namespace CMS
 {
@@ -37,7 +38,10 @@ namespace CMS
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<LoggingFilter>();
+            });
 
             services.Configure<List<Card>>(Configuration);
 

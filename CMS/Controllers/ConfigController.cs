@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,8 +49,7 @@ namespace CMS.Controllers
                         .ToList<Card>();
             }
 
-            var json = JsonConvert.SerializeObject(CardCollection.Cards, Formatting.Indented);
-            return Ok(json);
+            return Ok(CardCollection.Cards);
         }
     }
 }

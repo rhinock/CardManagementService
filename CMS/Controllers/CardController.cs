@@ -5,7 +5,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using CMS.Enums;
-using Newtonsoft.Json;
 
 namespace CMS.Controllers
 {
@@ -25,8 +24,7 @@ namespace CMS.Controllers
         [ProducesResponseType(typeof(List<Card>), 200)]
         public ActionResult<List<Card>> GetCards()
         {
-            var json = JsonConvert.SerializeObject(CardCollection.Cards, Formatting.Indented);
-            return Ok(json);
+            return Ok(CardCollection.Cards);
         }
 
         /// <summary>
@@ -58,8 +56,7 @@ namespace CMS.Controllers
                     Message = "Card not found"
                 });
 
-            var json = JsonConvert.SerializeObject(cards, Formatting.Indented);
-            return Ok(json);
+            return Ok(cards);
         }
 
         /// <summary>
@@ -93,8 +90,7 @@ namespace CMS.Controllers
 
             CardCollection.Cards.Add(card);
 
-            var json = JsonConvert.SerializeObject(card, Formatting.Indented);
-            return Ok(json);
+            return Ok(card);
         }
 
         /// <summary>
@@ -124,8 +120,7 @@ namespace CMS.Controllers
 
             card.Name = name;
 
-            var json = JsonConvert.SerializeObject(card, Formatting.Indented);
-            return Ok(json);
+            return Ok(card);
         }
 
         /// <summary>
