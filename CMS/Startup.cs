@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Microsoft.OpenApi.Models;
 using System.Threading.Tasks;
 using CMS.Enums;
+using System.Text.Json;
 
 namespace CMS
 {
@@ -42,7 +43,7 @@ namespace CMS
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo() { Title = "CMS" });
+                c.SwaggerDoc("v1", new OpenApiInfo() { Title = "CMS", Version = "v1" });
 
                 var filePath = Path.Combine(AppContext.BaseDirectory, $"{nameof(CMS)}.xml");
                 c.IncludeXmlComments(filePath);
@@ -102,15 +103,16 @@ namespace CMS
 
             app.Use(async (context, func) =>
             {
-                if (!context.Response.Headers.TryGetValue("API-KEY", out var key) || !key.Equals("secret-api-key"))
+                if (!context.Request.Headers.TryGetValue("API-KEY", out var key) || !key.Equals("1234"))
                 {
                     context.Response.StatusCode = 401;
+                    context.Response.ContentType = "application/json";
                     await context.Response.WriteAsJsonAsync(
                         new ApiError()
                         {
                             Result = BusinessResult.Unauthorized,
                             Message = "Invalid api key"
-                        });
+                        }, new JsonSerializerOptions { WriteIndented = true });
                     return;
                 }
 
@@ -122,12 +124,6 @@ namespace CMS
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Card}/{action=GetCard}/{id?}");
-            });
-
-            app.Run(context =>
-            {
-                context.Response.Redirect("/docs");
-                return Task.FromResult(0);
             });
         }
     }

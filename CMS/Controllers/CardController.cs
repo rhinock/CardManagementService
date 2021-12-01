@@ -23,7 +23,7 @@ namespace CMS.Controllers
         /// <returns>Collection of cards or empty array if there are no cards</returns>
         [HttpGet("GetCards")]
         [ProducesResponseType(typeof(List<Card>), 200)]
-        public IActionResult GetCards()
+        public ActionResult<List<Card>> GetCards()
         {
             var json = JsonConvert.SerializeObject(CardCollection.Cards, Formatting.Indented);
             return Ok(json);
@@ -36,18 +36,26 @@ namespace CMS.Controllers
         /// <response code="200">OK</response>
         /// <response code="404">Card not found</response>
         /// <returns>A card that belongs to the user</returns>
-        [HttpGet]
+        [HttpGet("GetCard")]
         [ProducesResponseType(typeof(Card), 200)]
+        [ProducesResponseType(typeof(ApiError), 400)]
         [ProducesResponseType(typeof(ApiError), 404)]
         public IActionResult GetCard(Guid userId)
         {
+            if (userId == default(Guid))
+                return BadRequest(new ApiError()
+                {
+                    Result = BusinessResult.BadRequest,
+                    Message = "UserId shouldn't be null"
+                });
+
             var cards = CardCollection.Cards.Where(c => c.UserId == userId);
 
-            if (cards == null)
-                return NotFound(new ApiError() 
-                { 
-                    Result = BusinessResult.NotFound, 
-                    Message = "Card not found" 
+            if (cards.Count() == 0)
+                return NotFound(new ApiError()
+                {
+                    Result = BusinessResult.NotFound,
+                    Message = "Card not found"
                 });
 
             var json = JsonConvert.SerializeObject(cards, Formatting.Indented);
@@ -63,20 +71,27 @@ namespace CMS.Controllers
         /// <response code="409">Pan is already in use</response>
         /// <returns>A new card for the user</returns>
         [ModelValidation]
-        [HttpPost]
+        [HttpPost("CreateCard")]
         [ProducesResponseType(typeof(Card), 200)]
         [ProducesResponseType(typeof(ApiError), 400)]
         [ProducesResponseType(typeof(ApiError), 409)]
         public IActionResult CreateCard([FromBody] Card card)
         {
-            if (!CardCollection.Cards.Any(c => c.Pan == card.Pan))
-                CardCollection.Cards.Add(card);
-            else
-                return Conflict(new ApiError() 
-                { 
+            if (CardCollection.Cards.Any(c => c.Id == card.Id))
+                return Conflict(new ApiError()
+                {
+                    Result = BusinessResult.Conflict,
+                    Message = "Id is already in use"
+                });
+
+            if (CardCollection.Cards.Any(c => c.Pan == card.Pan))
+                return Conflict(new ApiError()
+                {
                     Result = BusinessResult.Conflict,
                     Message = "Pan is already in use"
                 });
+
+            CardCollection.Cards.Add(card);
 
             var json = JsonConvert.SerializeObject(card, Formatting.Indented);
             return Ok(json);
@@ -92,11 +107,11 @@ namespace CMS.Controllers
         /// <response code="404">Card not found</response>
         /// <returns>Edited card with a new name</returns>
         [ModelValidation]
-        [HttpPut]
+        [HttpPut("EditCard")]
         [ProducesResponseType(typeof(Card), 200)]
         [ProducesResponseType(typeof(BadRequestObjectResult), 400)]
         [ProducesResponseType(typeof(ApiError), 404)]
-        public IActionResult EditCard([FromRoute] Guid id, [FromBody] string name)
+        public IActionResult EditCard([FromQuery] Guid id, [FromBody] string name)
         {
             var card = CardCollection.Cards.FirstOrDefault(c => c.Id == id);
 
@@ -120,8 +135,8 @@ namespace CMS.Controllers
         /// <response code="200">OK</response>
         /// <response code="404">Card not found</response>
         /// <returns>OK if deletion is successful</returns>
-        [HttpDelete]
-        [ProducesResponseType(typeof(OkResult), 200)]
+        [HttpDelete("DeleteCard")]
+        [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ApiError), 404)]
         public IActionResult DeleteCard(Guid id)
         {

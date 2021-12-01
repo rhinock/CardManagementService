@@ -9,7 +9,9 @@ using System.Linq;
 
 namespace CMS.Controllers
 {
-    public class ConfigController : Controller
+    [Route("Config")]
+    [ApiController]
+    public class ConfigController : ControllerBase
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<ConfigController> _logger;
@@ -25,9 +27,9 @@ namespace CMS.Controllers
         /// </summary>
         /// <response code="200">OK</response>
         /// <returns>Collection of cards or empty array if there are no cards</returns>
-        [HttpGet]
+        [HttpGet("GetConfig")]
         [ProducesResponseType(typeof(List<Card>), 200)]
-        public IActionResult GetConfig()
+        public ActionResult<List<Card>> GetConfig()
         {
             _logger.LogInformation("ConfigController.GetConfig");
 
