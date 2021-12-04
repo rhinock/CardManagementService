@@ -112,7 +112,8 @@ namespace CMS
                     context.Response.StatusCode = 401;
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsJsonAsync(
-                        new ApiError()
+                        // new ApiError()
+                        new ResponseModel
                         {
                             Result = BusinessResult.Unauthorized,
                             Message = "Invalid api key"

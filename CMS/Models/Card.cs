@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CMS.Attributes;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace CMS.Models
@@ -14,13 +15,15 @@ namespace CMS.Models
         /// <summary>
         /// Card Number
         /// </summary>
-        [RegularExpression(@"^\d{4}\s*\d{4}\s*\d{4}\s*\d{4}$", ErrorMessage = "Card Number is invalid")]
+        [PanValidation(ErrorMessage = "Card Number is invalid")]
+        [StringLength(16)]
         public string Pan { get; set; }
 
         /// <summary>
         /// Month and Year
         /// </summary>
         [Required]
+        [ExpireValidation(ErrorMessage = "Month or year is less than current month or year")]
         public Expire Expire { get; set; }
 
         public string Name { get; set; }

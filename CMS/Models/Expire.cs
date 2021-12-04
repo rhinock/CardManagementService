@@ -1,8 +1,12 @@
-﻿namespace CMS
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CMS
 {
     public class Expire
     {
+        [Range(1, 12)]
         public int Month { get; set; }
+        [Range(2021, 2099)]
         public int Year { get; set; }
 
         public Expire()
