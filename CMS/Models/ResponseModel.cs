@@ -6,5 +6,17 @@ namespace CMS.Models
     {
         public BusinessResult Result { get; set; }
         public string Message { get; set; }
+
+        public ResponseModel()
+        {
+            Result = BusinessResult.Success;
+            Message = "Success";
+        }
+
+        public ResponseModel(BusinessResult result, string message)
+        {
+            Result = result;
+            Message = message;
+        }
     }
 }

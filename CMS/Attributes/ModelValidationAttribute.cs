@@ -13,13 +13,33 @@ namespace CMS.Attributes
             if (!context.ModelState.IsValid)
                 context.Result = new BadRequestObjectResult(
                     // new ApiError
-                    new ResponseModel
+                    new ApiResponseModel<Card>
                     {
                         // Result = BusinessResult.BadRequest,
                         // Result = BusinessResult.Error,
                         Result= BusinessResult.InvalidModel,
                         Message = context.ModelState.Values.ToString()
                     });
+        }
+
+        //public override void OnActionExecuted(ActionExecutedContext context)
+        //{
+        //    base.OnActionExecuted(context);
+        //}
+
+        public override void OnResultExecuting(ResultExecutingContext context)
+        {
+            base.OnResultExecuting(context);
+
+            if (!context.ModelState.IsValid)
+            {
+                context.Result = new BadRequestObjectResult(
+                    new ApiResponseModel<Card>()
+                    {
+                        Result = BusinessResult.InvalidModel,
+                        Message = context.ModelState.Values.ToString()
+                    });
+            }
         }
     }
 }

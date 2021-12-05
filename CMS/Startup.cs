@@ -76,6 +76,8 @@ namespace CMS
                 };
 
                 c.AddSecurityRequirement(requirement);
+
+                c.SchemaFilter<EnumSchemaFilter>();
             });
         }
 
@@ -117,7 +119,8 @@ namespace CMS
                         {
                             Result = BusinessResult.Unauthorized,
                             Message = "Invalid api key"
-                        }, new JsonSerializerOptions { WriteIndented = true });
+                        }); 
+                        // ,new JsonSerializerOptions { WriteIndented = true });
                     return;
                 }
 
