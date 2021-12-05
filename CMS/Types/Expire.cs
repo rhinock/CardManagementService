@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CMS
+namespace CMS.Types
 {
     public class Expire
     {

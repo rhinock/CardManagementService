@@ -1,4 +1,5 @@
 ﻿using CMS.Attributes;
+using CMS.Types;
 using System;
 using System.ComponentModel.DataAnnotations;
 

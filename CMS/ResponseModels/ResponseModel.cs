@@ -1,6 +1,6 @@
 ﻿using CMS.Enums;
 
-namespace CMS.Models
+namespace CMS.ResponseModels
 {
     public class ResponseModel
     {

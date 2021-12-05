@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace CMS.Models
+namespace CMS.RequestModels
 {
     public class GetCardRequestModel
     {

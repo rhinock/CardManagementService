@@ -5,147 +5,104 @@ using System.Linq;
 using System.Collections.Generic;
 using CMS.Enums;
 using CMS.Attributes;
+using CMS.ResponseModels;
+using CMS.RequestModels;
 
 namespace CMS.Controllers
 {
     /// <summary>
     /// Api controller for cards
     /// </summary>
-    [Route("Card")]
-    [ApiController]
-    public class CardController : ControllerBase
+    [Route("api/card")]
+    public class CardController : BaseController
     {
-        /// <summary>
-        /// Get all cards
-        /// </summary>
-        /// <response code="200">OK</response>
-        /// <returns>Collection of cards or empty array if there are no cards</returns>
-        [HttpGet("GetCards")]
-        [ProducesResponseType(typeof(List<Card>), 200)]
-        public ActionResult<List<Card>> GetCards()
-        {
-            return Ok(CardCollection.Cards);
-        }
-
         /// <summary>
         /// Get a card by userId
         /// </summary>
         /// <param name="model"></param>
-        /// <response code="200">OK</response>
-        /// <response code="404">Card not found</response>
         /// <returns>A card that belongs to the user</returns>
-        [HttpGet("Card")]
-        [ProducesResponseType(typeof(Card), 200)]
-        [ProducesResponseType(typeof(ResponseModel), 400)]
-        [ProducesResponseType(typeof(ResponseModel), 404)]
+        [HttpGet]
+        [ProducesResponseType(typeof(ResponseModel), 200)]
         public IActionResult GetCard([FromQuery]GetCardRequestModel model)
         {
-            CardResponseModel responseModel = new CardResponseModel();
+            IEnumerable<Card> cards;
 
             if (model.Id.HasValue)
             {
-                responseModel.Items = CardCollection.Cards.Where(c =>c.Id == model.Id);
+                cards = CardCollection.Cards.Where(c =>c.Id == model.Id);
             }
             else if (model.UserId.HasValue)
             {
-                responseModel.Items = CardCollection.Cards.Where(c => c.UserId == model.UserId);
+                cards = CardCollection.Cards.Where(c => c.UserId == model.UserId);
             }
             else
             {
-                responseModel.Items = CardCollection.Cards;
+                cards = CardCollection.Cards;
             }
 
-            return Ok(responseModel);
+            return Info(cards);
         }
 
         /// <summary>
         /// Create a card
         /// </summary>
         /// <param name="card"></param>
-        /// <response code="200">OK</response>
-        /// <response code="400">Card model is not valid</response>
-        /// <response code="409">Pan is already in use</response>
         /// <returns>A new card for the user</returns>
-        //[ModelValidation]
-        //[HttpPost("CreateCard")]
-        //[ProducesResponseType(typeof(Card), 200)]
-        //[ProducesResponseType(typeof(ApiError), 400)]
-        //[ProducesResponseType(typeof(ApiError), 409)]
-        //public IActionResult CreateCard([FromBody] Card card)
-        //{
-        //    if (CardCollection.Cards.Any(c => c.Id == card.Id))
-        //        return Conflict(new ApiError()
-        //        {
-        //            Result = BusinessResult.Conflict,
-        //            Message = "Id is already in use"
-        //        });
+        [ModelValidation]
+        [HttpPost]
+        [ProducesResponseType(typeof(ResponseModel), 200)]
+        [ProducesResponseType(typeof(ResponseModel), 400)]
+        public IActionResult CreateCard([FromBody] Card card)
+        {
+            if (CardCollection.Cards.Any(c => c.Id == card.Id))
+                return Error("Id is already in use");
 
-        //    if (CardCollection.Cards.Any(c => c.Pan == card.Pan))
-        //        return Conflict(new ApiError()
-        //        {
-        //            Result = BusinessResult.Conflict,
-        //            Message = "Pan is already in use"
-        //        });
+            if (CardCollection.Cards.Any(c => c.Pan == card.Pan))
+                return Error("Pan is already in use");
 
-        //    CardCollection.Cards.Add(card);
+            CardCollection.Cards.Add(card);
 
-        //    return Ok(card);
-        //}
+            return Info();
+        }
 
         /// <summary>
         /// Edit a card
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
-        /// <response code="200">OK</response>
-        /// <response code="400">Card model is not valid</response>
-        /// <response code="404">Card not found</response>
         /// <returns>Edited card with a new name</returns>
-        //[ModelValidation]
-        //[HttpPut("EditCard")]
-        //[ProducesResponseType(typeof(Card), 200)]
-        //[ProducesResponseType(typeof(BadRequestObjectResult), 400)]
-        //[ProducesResponseType(typeof(ApiError), 404)]
-        //public IActionResult EditCard([FromQuery] Guid id, [FromBody] string name)
-        //{
-        //    var card = CardCollection.Cards.FirstOrDefault(c => c.Id == id);
+        [ModelValidation]
+        [HttpPatch]
+        [ProducesResponseType(typeof(ResponseModel), 200)]
+        [ProducesResponseType(typeof(ResponseModel), 400)]
+        public IActionResult EditCard([FromBody] EditCardRequestModel model)
+        {
+            var card = CardCollection.Cards.FirstOrDefault(c => c.Id == model.Id);
 
-        //    if (card == null)
-        //        return NotFound(new ApiError()
-        //        {
-        //            Result = BusinessResult.NotFound,
-        //            Message = "Card not found"
-        //        });
+            if (card == null)
+                return Error("Card not found", BusinessResult.NotFound);
 
-        //    card.Name = name;
+            card.Name = model.Name;
 
-        //    return Ok(card);
-        //}
+            return Info();
+        }
 
         /// <summary>
         /// Delete a card by id
         /// </summary>
         /// <param name="id"></param>
-        /// <response code="200">OK</response>
-        /// <response code="404">Card not found</response>
         /// <returns>OK if deletion is successful</returns>
-        //[HttpDelete("DeleteCard")]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(typeof(ApiError), 404)]
-        //public IActionResult DeleteCard(Guid id)
-        //{
-        //    var card = CardCollection.Cards.FirstOrDefault(c => c.Id == id);
+        [HttpDelete]
+        [ProducesResponseType(typeof(ResponseModel), 200)]
+        [ProducesResponseType(typeof(ResponseModel), 400)]
+        public IActionResult DeleteCard(Guid id)
+        {
+            var card = CardCollection.Cards.FirstOrDefault(c => c.Id == id);
 
-        //    if (card == null)
-        //        return NotFound(new ApiError()
-        //        {
-        //            Result = BusinessResult.NotFound,
-        //            Message = "Card not found"
-        //        });
+            if (card == null)
+                return Error("Card not found", BusinessResult.NotFound);
 
-        //    CardCollection.Cards.Remove(card);
+            CardCollection.Cards.Remove(card);
 
-        //    return Ok();
-        //}
+            return Info();
+        }
     }
 }
