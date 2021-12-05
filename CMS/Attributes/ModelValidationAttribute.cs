@@ -17,8 +17,8 @@ namespace CMS.Attributes
                     {
                         // Result = BusinessResult.BadRequest,
                         // Result = BusinessResult.Error,
-                        Result= BusinessResult.InvalidModel,
-                        Message = context.ModelState.Values.ToString()
+                        ErrorCode= BusinessResult.InvalidModel,
+                        ErrorMessage = context.ModelState.Values.ToString()
                     });
         }
 
@@ -36,8 +36,8 @@ namespace CMS.Attributes
                 context.Result = new BadRequestObjectResult(
                     new ApiResponseModel<Card>()
                     {
-                        Result = BusinessResult.InvalidModel,
-                        Message = context.ModelState.Values.ToString()
+                        ErrorCode = BusinessResult.InvalidModel,
+                        ErrorMessage = context.ModelState.Values.ToString()
                     });
             }
         }

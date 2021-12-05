@@ -50,7 +50,7 @@ namespace CMS.Controllers
                     .ToList<Card>();
             }
 
-            cardResponseModel.Data = CardCollection.Cards;
+            cardResponseModel.Result = CardCollection.Cards;
 
             return Ok(cardResponseModel);
         }
