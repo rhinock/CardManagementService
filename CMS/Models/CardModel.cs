@@ -1,5 +1,4 @@
 ﻿using CMS.Attributes;
-using CMS.Interfaces;
 using CMS.Types;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace CMS.Models
 {
-    public class CardModel : ILoggable
+    public class CardModel
     {
         public Guid Id { get; set; }
 
@@ -29,7 +28,7 @@ namespace CMS.Models
 
         public Guid UserId { get; set; }
 
-        public string GetData()
+        public override string ToString()
         {
             var stringBuilder = new StringBuilder();
 

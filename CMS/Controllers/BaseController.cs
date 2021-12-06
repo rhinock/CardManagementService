@@ -16,7 +16,7 @@ namespace CMS.Controllers
 
         protected IActionResult Info<T>(T data)
         {
-            return Ok(new ResponseModelWithData<T>()
+            return Ok(new ResponseDataModel<T>()
             {
                 Data = data
             });

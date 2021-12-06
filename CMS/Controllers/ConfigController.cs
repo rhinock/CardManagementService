@@ -1,18 +1,19 @@
 ﻿using CMS.Entities;
+using CMS.Extensions;
 using CMS.Models;
+using CMS.ResponseModels;
 using CMS.Types;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace CMS.Controllers
 {
-    [Route("Config")]
+    [Route("api/config")]
     [ApiController]
-    public class ConfigController : ControllerBase
+    public class ConfigController : BaseController
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<ConfigController> _logger;
@@ -26,11 +27,10 @@ namespace CMS.Controllers
         /// <summary>
         /// Get configuration from json
         /// </summary>
-        /// <response code="200">OK</response>
         /// <returns>Collection of cards or empty array if there are no cards</returns>
-        [HttpGet("GetConfig")]
-        [ProducesResponseType(typeof(List<Card>), 200)]
-        public ActionResult<List<Card>> GetConfig()
+        [HttpGet]
+        [ProducesResponseType(typeof(ResponseModel), 200)]
+        public IActionResult GetConfig()
         {
             _logger.LogInformation("ConfigController.GetConfig");
 
@@ -51,7 +51,7 @@ namespace CMS.Controllers
                         .ToList<Card>();
             }
 
-            return Ok(CardCollection.Cards);
+            return Info(CardCollection.Cards.Select(c => c.To<Card, CardModel>()));
         }
     }
 }

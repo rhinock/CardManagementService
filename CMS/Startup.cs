@@ -1,4 +1,3 @@
-using CMS.Models;
 using CMS.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,10 +10,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using Microsoft.OpenApi.Models;
-using System.Threading.Tasks;
 using CMS.Enums;
 using System.Text.Json;
-// using CMS.Filters;
 using CMS.ResponseModels;
 using CMS.Entities;
 
@@ -116,7 +113,6 @@ namespace CMS
                     context.Response.StatusCode = 401;
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsJsonAsync(
-                        // new ApiError()
                         new ResponseModel
                         {
                             Result = BusinessResult.Unauthorized,

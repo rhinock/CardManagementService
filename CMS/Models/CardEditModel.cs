@@ -1,14 +1,13 @@
-﻿using CMS.Interfaces;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CMS.Models
 {
-    public class CardEditModel : ILoggable
+    public class CardEditModel
     {
         [Required]
         public string Name { get; set; }
 
-        public string GetData()
+        public override string ToString()
         {
             return $"Name: {Name}";
         }
