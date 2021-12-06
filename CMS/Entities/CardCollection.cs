@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CMS.Models
+namespace CMS.Entities
 {
     public static class CardCollection
     {

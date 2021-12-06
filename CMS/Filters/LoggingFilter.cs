@@ -1,115 +1,128 @@
-﻿using CMS.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Text.Json;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿//using CMS.Models;
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.AspNetCore.Mvc.Filters;
+//using Microsoft.Extensions.Logging;
+//using System;
+//using System.Collections.Generic;
+//using System.IO;
+//using System.Text;
+//using System.Text.Json;
+//using System.Text.RegularExpressions;
+//using System.Threading.Tasks;
 
-namespace CMS.Filters
-{
-    public class LoggingFilter : IAsyncActionFilter
-    {
-        private readonly ILogger<LoggingFilter> _logger;
-        private readonly StringBuilder _stringBuilder = new StringBuilder();
+//namespace CMS.Filters
+//{
+//    public class LoggingFilter : IAsyncActionFilter
+//    {
+//        private readonly ILogger<LoggingFilter> _logger;
+//        private readonly StringBuilder _stringBuilder = new StringBuilder();
 
-        public LoggingFilter(ILogger<LoggingFilter> logger)
-        {
-            _logger = logger;
-        }
+//        public LoggingFilter(ILogger<LoggingFilter> logger)
+//        {
+//            _logger = logger;
+//        }
 
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-        {
-            _stringBuilder.Append("Request");
+//        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+//        {
+//            try
+//            {
+//                _stringBuilder.Append("Request");
+//                ActionExecutinContextLog(context);
+//            }
+//            catch (Exception exception)
+//            {
+//                LogErrors(_logger, exception);
+//            }
+//            finally
+//            {
+//                _logger.LogInformation(_stringBuilder.ToString());
+//                _stringBuilder.Clear();
+//            }
 
-            try
-            {
+//            var actionExecutionDelegate = await next();
 
-                if (context.HttpContext.Request.Method != "GET")
-                {
-                    var request = context.HttpContext.Request;
+//            try
+//            {
+//                _stringBuilder.AppendLine("Response");
 
-                    if (request.Body.CanSeek)
-                    {
-                        request.Body.Seek(0, SeekOrigin.Begin);
+//                var objectResult = actionExecutionDelegate.Result as ObjectResult;
+//                _stringBuilder.AppendLine($"StatusCode: {objectResult.StatusCode}");
 
-                        using (var reader = new StreamReader(request.Body))
-                        {
-                            var requestBody = await reader.ReadToEndAsync();
-                            var deserializedCard = JsonSerializer.Deserialize<Card>(requestBody);
+//                if (objectResult.Value is IList<Card> cards)
+//                {
+//                    foreach (var card in cards)
+//                    {
+//                        AppendLines(_stringBuilder, card);
+//                    }
+//                }
 
-                            AppendLines(_stringBuilder, deserializedCard);                            
-                        }
-                    }
-                }
+//                if (objectResult.Value is Card c)
+//                {
+//                    AppendLines(_stringBuilder, c);
+//                }
+//            }
+//            catch (Exception exception)
+//            {
+//                LogErrors(_logger, exception);
+//            }
 
-            }
-            catch (Exception exception)
-            {
-                LogErrors(_logger, exception);
-            }
+//            _logger.LogInformation(_stringBuilder.ToString());
+//        }
 
-            _logger.LogInformation(_stringBuilder.ToString());
+//        private void AppendLines<T>(T data)
+//        {
+//            stringBuilder.AppendLine($"Id: {data.Id}");
+//            stringBuilder.AppendLine($"Cvc: {Regex.Replace(card.Cvc, @"[\d]", "*")}");
 
-            var actionExecutionDelegate = await next();
+//            stringBuilder.AppendLine($"Pan: " +
+//                $"{Regex.Replace(card.Pan.Substring(0, card.Pan.Length - 4), @"\d", "*")}" +
+//                $"{card.Pan.Substring(card.Pan.Length - 4, 4)}");
 
-            try
-            {
-                _stringBuilder.Clear();
-                _stringBuilder.AppendLine("Response");
+//            stringBuilder.AppendLine($"Expire: " +
+//                $"Month {card.Expire.Month}, " +
+//                $"Year {card.Expire.Year}");
 
-                var objectResult = actionExecutionDelegate.Result as ObjectResult;
-                _stringBuilder.AppendLine($"StatusCode: {objectResult.StatusCode}");
+//            stringBuilder.AppendLine($"IsDefault: {card.IsDefault}");
+//            stringBuilder.AppendLine($"UserId: {card.UserId}");
 
-                if (objectResult.Value is IList<Card> cards)
-                {
-                    foreach (var card in cards)
-                    {
-                        AppendLines(_stringBuilder, card);
-                    }
-                }
+//            stringBuilder.AppendLine();
+//        }
 
-                if (objectResult.Value is Card c)
-                {
-                    AppendLines(_stringBuilder, c);
-                }
-            }
-            catch (Exception exception)
-            {
-                LogErrors(_logger, exception);
-            }
+//        private void ObjectLog<T>(T result)
+//        {
+//            switch (result)
+//            {
+//                case typeof(Card):
+//                    var card = result as Card;
 
-            _logger.LogInformation(_stringBuilder.ToString());
-        }
 
-        private void AppendLines(StringBuilder stringBuilder, Card card)
-        {
-            stringBuilder.AppendLine($"Id: {card.Id}");
-            stringBuilder.AppendLine($"Cvc: {Regex.Replace(card.Cvc, @"[\d]", "*")}");
+//            }
 
-            stringBuilder.AppendLine($"Pan: " +
-                $"{Regex.Replace(card.Pan.Substring(0, card.Pan.Length - 4), @"\d", "*")}" +
-                $"{card.Pan.Substring(card.Pan.Length - 4, 4)}");
+            
+//        }
 
-            stringBuilder.AppendLine($"Expire: " +
-                $"Month {card.Expire.Month}, " +
-                $"Year {card.Expire.Year}");
+//        private void ActionExecutinContextLog(ActionExecutingContext context)
+//        {
+//            foreach (var item in context.ActionArguments)
+//            {
+//                switch (item.Key)
+//                {
+//                    case "Id":
+//                        var id = item.Value as Guid?;
+//                        _stringBuilder.AppendLine($"Id: {id}");
+//                        break;
+//                    default:
+//                        _stringBuilder.AppendLine($"{item.Key}: {item.Value}");
+//                        break;
+//                }
+//            }
+//        }
 
-            stringBuilder.AppendLine($"IsDefault: {card.IsDefault}");
-            stringBuilder.AppendLine($"UserId: {card.UserId}");
-
-            stringBuilder.AppendLine();
-        }
-
-        private void LogErrors(ILogger logger, Exception exception)
-        {
-            logger.LogError(exception.Message);
-            logger.LogError(exception.StackTrace);
-            logger.LogError(exception.InnerException.Message);
-        }
-    }
-}
+//        private void LogErrors(ILogger logger, Exception exception)
+//        {
+//            logger.LogError(exception.Message);
+//            logger.LogError(exception.StackTrace);
+//            logger.LogError(exception.InnerException.Message);
+//        }
+//    }
+//}

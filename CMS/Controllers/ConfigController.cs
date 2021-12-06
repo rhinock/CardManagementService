@@ -1,4 +1,5 @@
-﻿using CMS.Models;
+﻿using CMS.Entities;
+using CMS.Models;
 using CMS.Types;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
