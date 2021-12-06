@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace CMS.Types
 {
@@ -19,6 +21,27 @@ namespace CMS.Types
         {
             Month = month;
             Year = year;
+        }
+
+        public static implicit operator Expire(string value)
+        {
+            int[] parts = value.Split('/').Select(x => int.Parse(x)).ToArray();
+
+            if (parts.Length != 2)
+                throw new ArgumentException("Only Month and Year should be defined");
+
+            if (parts[1] < DateTime.Now.Year)
+                throw new ArgumentException("Year shouldn't be less than current year");
+
+            if (parts[0] < 1 || parts[0] > 12)
+                throw new ArgumentException("Month shouldn't be less than current month");
+
+            return new Expire { Month = parts[0], Year = parts[1] };
+        }
+
+        public override string ToString()
+        {
+            return $"{Month}/{Year}";
         }
     }
 }
