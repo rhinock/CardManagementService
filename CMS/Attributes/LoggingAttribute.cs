@@ -1,4 +1,5 @@
 ﻿using CMS.ResponseModels;
+using log4net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Diagnostics;
@@ -7,14 +8,16 @@ namespace CMS.Attributes
 {
     public class LoggingAttribute : ActionFilterAttribute
     {
+        private readonly ILog _log = LogManager.GetLogger(typeof(LoggingAttribute));
+
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             foreach (var item in context.ActionArguments)
             {
                 string value = item.Value?.ToString();
 
-                Debug.WriteLine($"{context.HttpContext.Request.Path}");
-                Debug.WriteLine($"{item.Key}: {value}");
+                _log.Info($"{context.HttpContext.Request.Path}");
+                _log.Info($"{item.Key}: {value}");
             }
         }
 
@@ -29,8 +32,8 @@ namespace CMS.Attributes
                     value = responseModel.ToString();
                 }
 
-                Debug.WriteLine($"{context.HttpContext.Request.Path}");
-                Debug.WriteLine($"Response: {value}");
+                _log.Info($"{context.HttpContext.Request.Path}");
+                _log.Info($"Response: {value}");
             }
         }
     }
