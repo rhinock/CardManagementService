@@ -94,8 +94,6 @@ namespace CMS.Controllers
         [ProducesResponseType(typeof(ResponseModel), 400)]
         public async Task<ActionResult> CreateCard([FromBody] CardModel model)
         {
-            // TODO: replace CardCollection.Cards to _repository
-
             if (_repository.Query<Card>().Any(c => c.Id == model.Id))
                 return await ErrorAsync("Id is already in use");
 
