@@ -9,6 +9,7 @@ namespace CMS.Entities
     public class Card : IEntity
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
         [StringLength(3)]
