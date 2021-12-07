@@ -32,7 +32,6 @@ namespace CMS.Controllers
             _repository = repository;
         }
 
-        // TODO: use this method for filling data in DB
         /// <summary>
         /// Get configuration from json
         /// </summary>
