@@ -96,17 +96,14 @@ namespace CMS.Controllers
         {
             // TODO: replace CardCollection.Cards to _repository
 
-            if (CardCollection.Cards.Any(c => c.Id == model.Id))
+            if (_repository.Query<Card>().Any(c => c.Id == model.Id))
                 return await ErrorAsync("Id is already in use");
 
-            if (CardCollection.Cards.Any(c => c.Pan == model.Pan))
+            if (_repository.Query<Card>().Any(c => c.Pan == model.Pan))
                 return await ErrorAsync("Pan is already in use");
 
             Card card = model.To<CardModel, Card>();
-
             await _repository.Create(card);
-
-            // CardCollection.Cards.Add(card);
 
             return await InfoAsync(card);
         }
@@ -130,7 +127,6 @@ namespace CMS.Controllers
                 return Error("Card not found", BusinessResult.NotFound);
 
             card.Name = model.Name;
-
             _repository.Update(card);
 
             return Info();
@@ -154,7 +150,6 @@ namespace CMS.Controllers
             if (card == null)
                 return Error("Card not found", BusinessResult.NotFound);
 
-            // CardCollection.Cards.Remove(card);
             _repository.Delete(card);
 
             return Info();
