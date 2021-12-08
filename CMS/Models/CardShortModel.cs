@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CMS.Models
 {
-    public class CardShortModel
+    public class CardShortModel : Model
     {
         [StringLength(3)]
         public string Cvc { get; set; }

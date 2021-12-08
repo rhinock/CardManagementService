@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace CMS.Models
 {
-    public class CardModel
+    public class CardModel : Model
     {
         public Guid Id { get; set; }
 

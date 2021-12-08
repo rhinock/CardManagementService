@@ -14,5 +14,8 @@ namespace CMS.Entities
         public Guid CardId { get; set; }
         public string Name { get; set; }
         public decimal Amount { get; set; }
+        
+        [ForeignKey("CardId")]
+        public Card Card { get; set; }
     }
 }

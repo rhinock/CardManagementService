@@ -101,7 +101,7 @@ namespace CMS.Controllers
             }
 
             operation = model.To<OperationCreateModel, Operation>();
-            operation.CardId = card.Id;
+            operation.Card = card;
             await _repository.Create(operation);
 
             return await InfoAsync(operation.Id);

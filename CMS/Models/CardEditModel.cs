@@ -2,7 +2,7 @@
 
 namespace CMS.Models
 {
-    public class CardEditModel
+    public class CardEditModel : Model
     {
         [Required]
         public string Name { get; set; }

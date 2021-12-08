@@ -1,4 +1,8 @@
-﻿using System;
+﻿using CMS.Attributes;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
+using System.Linq;
+using System.Reflection;
 
 namespace CMS.Extensions
 {
@@ -15,7 +19,9 @@ namespace CMS.Extensions
             {
                 foreach (var srcProperty in srcType.GetProperties())
                 {
-                    if (dstProperty.Name == srcProperty.Name)
+                    var attribute = srcProperty.GetCustomAttribute<IgnoreConvertAttribute>();
+
+                    if (attribute == null && dstProperty.Name == srcProperty.Name)
                     {
                         dstProperty.SetValue(result, srcProperty.GetValue(src));
                     }
@@ -23,6 +29,16 @@ namespace CMS.Extensions
             }
 
             return result;
+        }
+
+        public static string GetErrorMessage(this ModelStateDictionary modelStateDictionary)
+        {
+            return modelStateDictionary
+                .Select(x => x.Value.Errors)
+                .Where(x => x.Count > 0)
+                .FirstOrDefault()?
+                .FirstOrDefault()?
+                .ErrorMessage;
         }
     }
 }

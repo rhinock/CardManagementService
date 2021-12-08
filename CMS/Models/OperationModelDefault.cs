@@ -2,7 +2,7 @@
 
 namespace CMS.Models
 {
-    public class OperationModelDefault
+    public class OperationModelDefault : Model
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
