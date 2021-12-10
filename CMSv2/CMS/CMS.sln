@@ -3,27 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31825.309
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{2E985E0D-F236-4B6F-9EF6-0AEFEDB55A79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PgDataStore", "ClassLibrary1\PgDataStore.csproj", "{2E985E0D-F236-4B6F-9EF6-0AEFEDB55A79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{C4711EE8-862F-4002-94B8-FCC7E3E1273B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{C4711EE8-862F-4002-94B8-FCC7E3E1273B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatewayService", "GatewayService\GatewayService.csproj", "{8D59FC89-D5BA-4454-BFBF-6D010A3E21A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GatewayService", "GatewayService\GatewayService.csproj", "{8D59FC89-D5BA-4454-BFBF-6D010A3E21A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RightsService", "RightsService\RightsService.csproj", "{CA690B9E-1926-4195-83DF-3C34A5A518F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RightsService", "RightsService\RightsService.csproj", "{CA690B9E-1926-4195-83DF-3C34A5A518F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalancerService", "BalancerService\BalancerService.csproj", "{F3F1A710-CCD2-4113-AB94-5C1E16ADBEEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalancerService", "BalancerService\BalancerService.csproj", "{F3F1A710-CCD2-4113-AB94-5C1E16ADBEEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardDataService", "CardDataService\CardDataService.csproj", "{04C97348-9174-4DBD-A544-9A34950942B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardDataService", "CardDataService\CardDataService.csproj", "{04C97348-9174-4DBD-A544-9A34950942B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperationDataService", "OperationDataService\OperationDataService.csproj", "{0CC6D658-8B2E-49C9-BA15-045414665D01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OperationDataService", "OperationDataService\OperationDataService.csproj", "{0CC6D658-8B2E-49C9-BA15-045414665D01}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{8DF286AB-BE80-499C-8D86-97CE9124A651}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{D8245CA1-3A8E-462F-BB81-5C52B95565E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTools", "WebTools\WebTools.csproj", "{2BFB7DCD-1C85-4C46-95AC-30FC7188120D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTools", "WebTools\WebTools.csproj", "{2BFB7DCD-1C85-4C46-95AC-30FC7188120D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerService", "LoggerService\LoggerService.csproj", "{7C02A6E4-B2E2-4DFD-AEC5-B043E13FFF30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerService", "LoggerService\LoggerService.csproj", "{7C02A6E4-B2E2-4DFD-AEC5-B043E13FFF30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectTools", "ObjectTools\ObjectTools.csproj", "{03ED2A40-D788-4724-857F-C360AB0844D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{7C02A6E4-B2E2-4DFD-AEC5-B043E13FFF30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C02A6E4-B2E2-4DFD-AEC5-B043E13FFF30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C02A6E4-B2E2-4DFD-AEC5-B043E13FFF30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03ED2A40-D788-4724-857F-C360AB0844D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03ED2A40-D788-4724-857F-C360AB0844D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03ED2A40-D788-4724-857F-C360AB0844D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03ED2A40-D788-4724-857F-C360AB0844D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{0CC6D658-8B2E-49C9-BA15-045414665D01} = {8DF286AB-BE80-499C-8D86-97CE9124A651}
 		{2BFB7DCD-1C85-4C46-95AC-30FC7188120D} = {D8245CA1-3A8E-462F-BB81-5C52B95565E1}
 		{7C02A6E4-B2E2-4DFD-AEC5-B043E13FFF30} = {8DF286AB-BE80-499C-8D86-97CE9124A651}
+		{03ED2A40-D788-4724-857F-C360AB0844D1} = {D8245CA1-3A8E-462F-BB81-5C52B95565E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59D20799-2702-4733-BFA0-145A5C7978E5}

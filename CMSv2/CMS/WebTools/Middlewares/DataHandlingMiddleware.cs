@@ -1,46 +1,55 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace WebTools.Middlewares
 {
     public abstract class DataHandlingMiddleware
     {
-        private RequestDelegate _requestDelegate;
-        public DataHandlingMiddleware(RequestDelegate requestDelegate)
+        private readonly RequestDelegate _next;
+        private readonly MiddlewareOptions _options;
+
+        public DataHandlingMiddleware(RequestDelegate next, MiddlewareOptions options = null)
         {
-            _requestDelegate = requestDelegate;
+            _next = next;
+            _options = options;
         }
+
+        protected MiddlewareOptions Options => _options;
 
         public async Task InvokeAsync(HttpContext context)
         {
             string method = context.Request.Method;
+            string path = context.Request.Path.Value.ToLower();
 
-            switch (method)
+            string prefix = _options.Get<string>("Prefix");
+
+            if(path.StartsWith($"/{prefix}"))
             {
-                case "GET":
-                    OnGet(context);
-                    break;
-                case "POST":
-                    OnPost(context);
-                    break;
-                case "PATCH":
-                    OnPatch(context);
-                    break;
-                default:
-                    context.Response.StatusCode = 404;
-                    break;
+                switch (method)
+                {
+                    case "GET":
+                        await OnGet(context);
+                        break;
+                    case "POST":
+                        await OnPost(context);
+                        break;
+                    case "PATCH":
+                        await OnPatch(context);
+                        break;
+                    default:
+                        context.Response.StatusCode = 404;
+                        break;
+                }
             }
-
-
+            else
+            {
+                context.Response.StatusCode = 404;
+            }
         }
 
-        public abstract bool OnGet(HttpContext context);
-        public abstract bool OnPost(HttpContext context);
-        public abstract bool OnPatch(HttpContext context);
+        public abstract Task OnGet(HttpContext context);
+        public abstract Task OnPost(HttpContext context);
+        public abstract Task OnPatch(HttpContext context);
 
         public virtual void OnError(HttpContext context)
         {

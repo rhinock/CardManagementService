@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Threading.Tasks;
+using System.Linq.Expressions;
+using System.Collections.Generic;
 
 namespace Domain.Interfaces
 {
     public interface IRepository
     {
-        void Create<T>(T item) where T : class;
-        void Update<T>(T item) where T : class;
-        void Delete<T>(T item) where T : class;
-        T Get<T>() where T : class;
-        IEnumerable<T> GetMany<T>();
+        Task Create<T>(T item) where T : class, IDataObject;
+        Task Update<T>(T item) where T : class, IDataObject;
+        Task Delete<T>(T item) where T : class, IDataObject;
+        T Get<T>(Expression<Func<T, bool>> predicate) where T : class, IDataObject;
+        IEnumerable<T> GetMany<T>(Expression<Func<T, bool>> predicate) where T : class, IDataObject;
     }
 }

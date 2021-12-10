@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace WebTools.Middlewares
 {
     public abstract class AuthenticationMiddleware
     {
-        private RequestDelegate _requestDelegate;
-        public AuthenticationMiddleware(RequestDelegate requestDelegate)
+        private readonly RequestDelegate _next;
+        private readonly MiddlewareOptions _options;
+
+        public AuthenticationMiddleware(RequestDelegate next, MiddlewareOptions options = null)
         {
-            _requestDelegate = requestDelegate;
+            _next = next;
+            _options = options;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -21,7 +20,7 @@ namespace WebTools.Middlewares
 
             if (Auth(authorizationValue))
             {
-                await _requestDelegate.Invoke(context);
+                await _next.Invoke(context);
             }
             else
             {
