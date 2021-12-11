@@ -12,11 +12,11 @@ using ObjectTools;
 
 using Newtonsoft.Json;
 
-using CardDataService.Objects;
+using OperationDataService.Objects;
 
 using Microsoft.AspNetCore.Http;
 
-namespace CardDataService
+namespace OperationDataService
 {
     public class RequestHandling : DataHandlingMiddleware
     {
@@ -34,14 +34,14 @@ namespace CardDataService
             {
                 Guid id = GetItemId(context);
 
-                Card card = Repository.Get<Card>(x => x.Id == id);
-                await SetResponseObject(context, card);
+                Operation operation = Repository.Get<Operation>(x => x.Id == id);
+                await SetResponseObject(context, operation);
             }
             else
             {
                 Guid emptyId = Guid.Empty;
-                IEnumerable<Card> cards = Repository.GetMany<Card>(x => x.UserId == emptyId);
-                await SetResponseObject(context, new { value = cards });
+                IEnumerable<Operation> operations = Repository.GetMany<Operation>(x => x.Id != emptyId);
+                await SetResponseObject(context, new { value = operations });
             }
         }
 
@@ -49,19 +49,19 @@ namespace CardDataService
         {
             Guid id = GetItemId(context);
 
-            Card card = Repository.Get<Card>(x => x.Id == id);
-            Card newData = JsonConvert.DeserializeObject<Card>(await GetBodyContent(context));
+            Operation operation = Repository.Get<Operation>(x => x.Id == id);
+            Operation newData = JsonConvert.DeserializeObject<Operation>(await GetBodyContent(context));
 
-            card.Set(newData);
-            card.Id = id;
-            await Repository.Update(card);
+            operation.Set(newData);
+            operation.Id = id;
+            await Repository.Update(operation);
 
             context.Response.StatusCode = 204;
         }
 
         protected override async Task OnPost(HttpContext context)
         {
-            Card newData = JsonConvert.DeserializeObject<Card>(await GetBodyContent(context));
+            Operation newData = JsonConvert.DeserializeObject<Operation>(await GetBodyContent(context));
             await Repository.Create(newData);
 
             context.Response.StatusCode = 201;
@@ -71,8 +71,8 @@ namespace CardDataService
         {
             Guid id = GetItemId(context);
 
-            Card card = Repository.Get<Card>(x => x.Id == id);
-            await Repository.Delete(card);
+            Operation operation = Repository.Get<Operation>(x => x.Id == id);
+            await Repository.Delete(operation);
 
             context.Response.StatusCode = 204;
         }
@@ -82,9 +82,10 @@ namespace CardDataService
             context.Response.StatusCode = 500;
             context.Response.ContentType = "application/json";
             await context.Response.WriteAsync(JsonConvert.SerializeObject(
-                new { 
-                    message = ex.Message, 
-                    stackTrace = ex.StackTrace, 
+                new
+                {
+                    message = ex.Message,
+                    stackTrace = ex.StackTrace,
                     innerException = ex.InnerException.ToString()
                 }));
         }

@@ -12,7 +12,7 @@ using Domain.Interfaces;
 
 namespace PgDataStore
 {
-    public class Repository<TContext> : IRepository where TContext : DataContext, new()
+    public class Repository : IRepository
     {
         private readonly ResourceConnection _connection;
 
@@ -23,7 +23,7 @@ namespace PgDataStore
 
         public async Task Create<T>(T item) where T : class, IDataObject
         {
-            using (DataContext  context = GetContext())
+            using (DataContext<T> context = GetContext<T>())
             {
                 await context.AddAsync(item);
                 await context.SaveChangesAsync();
@@ -32,14 +32,14 @@ namespace PgDataStore
 
         public async Task Update<T>(T item) where T : class, IDataObject
         {
-            using (DataContext  context = GetContext())
+            using (DataContext<T> context = GetContext<T>())
             {
                 PropertyInfo[] properties = typeof(T).GetProperties();
                 T currentItem = context.Set<T>().FirstOrDefault(GenerateItemExpression(item));
 
                 foreach (PropertyInfo property in properties)
                 {
-                    if (property.Name != item.IdentityName)
+                    if (property.Name != item.IdentityName && property.Name != nameof(item.IdentityName))
                     {
                         property.SetValue(currentItem, property.GetValue(item));
                     }
@@ -52,7 +52,7 @@ namespace PgDataStore
 
         public async Task Delete<T>(T item) where T : class, IDataObject
         {
-            using (DataContext  context = GetContext())
+            using (DataContext<T> context = GetContext<T>())
             {
                 T currentItem = context.Set<T>().FirstOrDefault(GenerateItemExpression(item));
 
@@ -63,7 +63,7 @@ namespace PgDataStore
 
         public T Get<T>(Expression<Func<T, bool>> predicate) where T : class, IDataObject
         {
-            using (DataContext  context = GetContext())
+            using (DataContext<T> context = GetContext<T>())
             {
                 return context.Set<T>().AsNoTracking().FirstOrDefault(predicate);
             }
@@ -71,9 +71,9 @@ namespace PgDataStore
 
         public IEnumerable<T> GetMany<T>(Expression<Func<T, bool>> predicate) where T : class, IDataObject
         {
-            using (DataContext  context = GetContext())
+            using (DataContext<T> context = GetContext<T>())
             {
-                return context.Set<T>($"{typeof(T).Name}s").AsNoTracking().Where(predicate).ToList();
+                return context.Set<T>().AsNoTracking().Where(predicate).ToList();
             }
         }
 
@@ -88,9 +88,9 @@ namespace PgDataStore
             return Expression.Lambda<Func<T, bool>>(body, parameter);
         }
 
-        private TContext GetContext()
+        private DataContext<T> GetContext<T>() where T : class, IDataObject
         {
-            return (TContext)Activator.CreateInstance(typeof(TContext), _connection.Value);
+            return new DataContext<T>(_connection.Value);
         }
     }
 }

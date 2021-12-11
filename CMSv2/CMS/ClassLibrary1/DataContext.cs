@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PgDataStore
 {
-    public abstract class DataContext : DbContext
+    public class DataContext<T> : DbContext where T : class, IDataObject
     {
         private readonly string _connectionString;
 
@@ -15,6 +15,11 @@ namespace PgDataStore
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql(_connectionString);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<T>();
         }
     }
 }
