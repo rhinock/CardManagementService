@@ -8,6 +8,7 @@
     <ProjectReference Include="..\ClassLibrary1\PgDataStore.csproj" />
     <ProjectReference Include="..\DataServices\DataServices.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\FileDataStore\FileDataStore.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,13 @@
-﻿namespace Domain.Interfaces
+﻿using Domain.Objects;
+
+using System.Threading.Tasks;
+
+namespace Domain.Interfaces
 {
     public interface ILogger
     {
-        void Info(string message);
-        void Error(string message);
+        LoggerOptions Options { get; }
+        Task Info(string message);
+        Task Error(string message);
     }
 }

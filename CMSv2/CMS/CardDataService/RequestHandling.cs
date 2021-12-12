@@ -70,7 +70,7 @@ namespace CardDataService
             Guid id = GetItemId(context);
 
             Card card = await Repository.Get<Card>(x => x.Id == id);
-            Card newData = JsonConvert.DeserializeObject<Card>(await GetBodyContent(context));
+            Card newData = JsonConvert.DeserializeObject<Card>(await context.Request.GetBodyAsStringAsync());
 
             card.Set(newData);
             card.Id = id;
@@ -82,7 +82,7 @@ namespace CardDataService
 
         protected override async Task OnPost(HttpContext context)
         {
-            Card newData = JsonConvert.DeserializeObject<Card>(await GetBodyContent(context));
+            Card newData = JsonConvert.DeserializeObject<Card>(await context.Request.GetBodyAsStringAsync());
             await Repository.Create(newData);
 
             context.Response.Headers.Add("ObjectId", newData.Id.ToString());

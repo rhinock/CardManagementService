@@ -72,19 +72,6 @@ namespace WebTools.Middlewares
             await context.Response.WriteAsync(ex.Message);
         }
 
-
-        protected async Task<string> GetBodyContent(HttpContext context)
-        {
-            string body;
-
-            using (StreamReader reader = new StreamReader(context.Request.Body, Encoding.UTF8))
-            {
-                body = await reader.ReadToEndAsync();
-            }
-
-            return body;
-        }
-
         protected async Task SetResponseObject<T>(HttpContext context, T data)
         {
             context.Response.StatusCode = 200;

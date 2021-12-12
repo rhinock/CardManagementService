@@ -71,7 +71,7 @@ namespace OperationDataService
             Guid id = GetItemId(context);
 
             Operation operation = await Repository.Get<Operation>(x => x.Id == id);
-            Operation newData = JsonConvert.DeserializeObject<Operation>(await GetBodyContent(context));
+            Operation newData = JsonConvert.DeserializeObject<Operation>(await context.Request.GetBodyAsStringAsync());
 
             operation.Set(newData);
             operation.Id = id;
@@ -83,7 +83,7 @@ namespace OperationDataService
 
         protected override async Task OnPost(HttpContext context)
         {
-            Operation newData = JsonConvert.DeserializeObject<Operation>(await GetBodyContent(context));
+            Operation newData = JsonConvert.DeserializeObject<Operation>(await context.Request.GetBodyAsStringAsync());
             await Repository.Create(newData);
 
             context.Response.Headers.Add("ObjectId", newData.Id.ToString());
