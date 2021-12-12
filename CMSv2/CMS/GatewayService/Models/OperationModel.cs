@@ -2,7 +2,7 @@
 
 namespace GatewayService.Models
 {
-    public class OperationModel : OperationModelDefault
+    public class OperationModel : OperationDefaultModel
     {
         public Guid CardId { get; set; }
 

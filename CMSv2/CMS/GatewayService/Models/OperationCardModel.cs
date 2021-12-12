@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GatewayService.Models
 {
-    public class CardShortModel : Model
+    public class OperationCardModel : Model
     {
         [StringLength(3)]
         public string Cvc { get; set; }

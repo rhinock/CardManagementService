@@ -29,6 +29,8 @@ namespace CardDataService.Objects
 
         public Guid UserId { get; set; }
 
+        public string ExpirationDate { get; set; }
+
         [NotMapped]
         [JsonIgnore]
         public string IdentityName => nameof(Id);

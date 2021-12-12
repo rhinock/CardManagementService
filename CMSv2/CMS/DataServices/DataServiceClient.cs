@@ -14,6 +14,7 @@ using Domain.Objects;
 using Domain.Interfaces;
 
 using DataServices.Objects;
+using System.ComponentModel;
 
 namespace DataServices
 {
@@ -33,6 +34,11 @@ namespace DataServices
             using (WebClient client = new WebClient())
             {
                 await client.UploadStringTaskAsync(path, "POST", JsonConvert.SerializeObject(item));
+                PropertyInfo identityProperty = typeof(T).GetProperty(item.IdentityName);
+
+                TypeConverter typeConverter = TypeDescriptor.GetConverter(identityProperty.PropertyType);
+                object identityValue = typeConverter.ConvertFromString(client.ResponseHeaders["ObjectId"]);
+                identityProperty.SetValue(item, identityValue);
             }
         }
 
@@ -52,7 +58,7 @@ namespace DataServices
 
             using (WebClient client = new WebClient())
             {
-                await client.UploadStringTaskAsync($"{path}({GetIdentityItem(item)})", "DELETE");
+                await client.UploadStringTaskAsync($"{path}({GetIdentityItem(item)})", "DELETE", "");
             }
         }
 

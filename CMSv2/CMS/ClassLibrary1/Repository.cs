@@ -39,7 +39,7 @@ namespace PgDataStore
 
                 foreach (PropertyInfo property in properties)
                 {
-                    if (property.Name != item.IdentityName && property.Name != nameof(item.IdentityName))
+                    if (property.Name != item.IdentityName && property.Name != nameof(item.SourceName) && property.Name != nameof(item.IdentityName))
                     {
                         property.SetValue(currentItem, property.GetValue(item));
                     }

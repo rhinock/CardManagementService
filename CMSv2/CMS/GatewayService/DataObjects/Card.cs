@@ -30,7 +30,7 @@ namespace GatewayService.DataObjects
         {
             get
             {
-                return Expire.ToString();
+                return Expire?.ToString();
             }
             set
             {

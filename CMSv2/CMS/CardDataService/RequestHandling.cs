@@ -76,6 +76,7 @@ namespace CardDataService
             card.Id = id;
             await Repository.Update(card);
 
+            context.Response.Headers.Add("ObjectId", card.Id.ToString());
             context.Response.StatusCode = 204;
         }
 
@@ -84,6 +85,7 @@ namespace CardDataService
             Card newData = JsonConvert.DeserializeObject<Card>(await GetBodyContent(context));
             await Repository.Create(newData);
 
+            context.Response.Headers.Add("ObjectId", newData.Id.ToString());
             context.Response.StatusCode = 201;
         }
 
@@ -94,6 +96,7 @@ namespace CardDataService
             Card card = await Repository.Get<Card>(x => x.Id == id);
             await Repository.Delete(card);
 
+            context.Response.Headers.Add("ObjectId", card.Id.ToString());
             context.Response.StatusCode = 204;
         }
 

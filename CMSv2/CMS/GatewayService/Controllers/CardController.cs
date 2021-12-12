@@ -89,25 +89,14 @@ namespace GatewayService.Controllers
         [ProducesResponseType(typeof(ResponseModel), 400)]
         public async Task<ActionResult> CreateCard([FromBody] CardModel model)
         {
-            //if (_repository.Query<Card>().Any(c => c.Id == model.Id))
-            //    return await ErrorAsync("Id is already in use");
-
-            Guid id = model.Id;
-            IEnumerable<Card> cards = await Repository.GetMany<Card>(c => c.Id == id);
-
-            if (cards.ToList().Any(c => c.Id != model.Id))
-                return await ErrorAsync("Id is already in use");
-
-            //if (_repository.Query<Card>().Any(c => c.Pan == model.Pan))
-            //    return await ErrorAsync("Pan is already in use");
-
+            /*
             if (cards.ToList().Any(c => c.Pan == model.Pan))
-                return await ErrorAsync("Pan is already in use");
+                return await ErrorAsync("Pan is already in use");*/
 
             Card card = model.To<CardModel, Card>();
             await Repository.Create(card);
 
-            return await InfoAsync(card);
+            return await InfoAsync(card.Id);
         }
 
         /// <summary>

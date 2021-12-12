@@ -11,6 +11,6 @@ namespace GatewayService.Models
         public decimal Amount { get; set; }
         
         [IgnoreConvert, ValidateMember]
-        public CardShortModel Card { get; set; }
+        public OperationCardModel Card { get; set; }
     }
 }

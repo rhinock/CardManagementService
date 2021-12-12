@@ -77,6 +77,7 @@ namespace OperationDataService
             operation.Id = id;
             await Repository.Update(operation);
 
+            context.Response.Headers.Add("ObjectId", newData.Id.ToString());
             context.Response.StatusCode = 204;
         }
 
@@ -85,6 +86,7 @@ namespace OperationDataService
             Operation newData = JsonConvert.DeserializeObject<Operation>(await GetBodyContent(context));
             await Repository.Create(newData);
 
+            context.Response.Headers.Add("ObjectId", newData.Id.ToString());
             context.Response.StatusCode = 201;
         }
 
@@ -95,6 +97,7 @@ namespace OperationDataService
             Operation operation = await Repository.Get<Operation>(x => x.Id == id);
             await Repository.Delete(operation);
 
+            context.Response.Headers.Add("ObjectId", operation.Id.ToString());
             context.Response.StatusCode = 204;
         }
 
