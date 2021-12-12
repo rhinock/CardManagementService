@@ -61,22 +61,24 @@ namespace PgDataStore
             }
         }
 
-        public T Get<T>(Expression<Func<T, bool>> predicate) where T : class, IDataObject
+        public async Task<T> Get<T>(Expression<Func<T, bool>> predicate) where T : class, IDataObject
         {
             using (DataContext<T> context = GetContext<T>())
             {
-                return context.Set<T>().AsNoTracking().FirstOrDefault(predicate);
+                return await context.Set<T>().AsNoTracking().FirstOrDefaultAsync(predicate);
             }
         }
 
-        public IEnumerable<T> GetMany<T>(Expression<Func<T, bool>> predicate) where T : class, IDataObject
+        public async Task<IEnumerable<T>> GetMany<T>(Expression<Func<T, bool>> predicate) where T : class, IDataObject
         {
             using (DataContext<T> context = GetContext<T>())
             {
-                return context.Set<T>().AsNoTracking().Where(predicate).ToList();
+                if (predicate != null)
+                    return await context.Set<T>().AsNoTracking().Where(predicate).ToListAsync();
+                else
+                    return await context.Set<T>().AsNoTracking().ToListAsync();
             }
         }
-
 
         private Expression<Func<T, bool>> GenerateItemExpression<T>(T item) where T : class, IDataObject
         {

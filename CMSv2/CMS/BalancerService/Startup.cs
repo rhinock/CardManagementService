@@ -1,17 +1,13 @@
-using Domain.Interfaces;
+using WebTools;
+
 using Domain.Objects;
+
+using System.Collections.Generic;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using PgDataStore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebTools;
 
 namespace BalancerService
 {
@@ -25,19 +21,17 @@ namespace BalancerService
 
         public void ConfigureServices(IServiceCollection services)
         {
-
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var resourceConnections = _config.GetSection("ConnectionResources").Get<Dictionary<string, ResourceConnection>>();
-            IRepository repository = new Repository(resourceConnections["MainData"]);
 
-            var requestHandlingOptions = new MiddlewareOptions();
-            requestHandlingOptions.Add("Repository", repository);
+            MiddlewareOptions options = new MiddlewareOptions();
+            options.Add("MainData", resourceConnections["MainData"]);
 
-            app.UseMiddleware<RequestHandling>(requestHandlingOptions);
+            app.UseMiddleware<RequestHandling>(options);
         }
     }
 }

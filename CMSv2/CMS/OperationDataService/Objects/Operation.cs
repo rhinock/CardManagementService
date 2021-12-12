@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Domain.Interfaces;
+using Newtonsoft.Json;
 
 namespace OperationDataService.Objects
 {
@@ -17,6 +18,11 @@ namespace OperationDataService.Objects
         public decimal Amount { get; set; }
 
         [NotMapped]
+        [JsonIgnore]
         public string IdentityName => nameof(Id);
+
+        [NotMapped]
+        [JsonIgnore]
+        public string SourceName => nameof(Operation);
     }
 }

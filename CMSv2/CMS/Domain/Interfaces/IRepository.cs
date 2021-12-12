@@ -10,7 +10,7 @@ namespace Domain.Interfaces
         Task Create<T>(T item) where T : class, IDataObject;
         Task Update<T>(T item) where T : class, IDataObject;
         Task Delete<T>(T item) where T : class, IDataObject;
-        T Get<T>(Expression<Func<T, bool>> predicate) where T : class, IDataObject;
-        IEnumerable<T> GetMany<T>(Expression<Func<T, bool>> predicate) where T : class, IDataObject;
+        Task<T> Get<T>(Expression<Func<T, bool>> predicate) where T : class, IDataObject;
+        Task<IEnumerable<T>> GetMany<T>(Expression<Func<T, bool>> predicate = null) where T : class, IDataObject;
     }
 }

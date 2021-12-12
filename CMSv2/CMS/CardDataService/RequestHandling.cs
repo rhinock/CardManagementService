@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
+using Domain.Objects;
 using Domain.Interfaces;
 
 using WebTools;
@@ -15,6 +16,7 @@ using Newtonsoft.Json;
 using CardDataService.Objects;
 
 using Microsoft.AspNetCore.Http;
+using Infrastructure;
 
 namespace CardDataService
 {
@@ -22,9 +24,10 @@ namespace CardDataService
     {
         public RequestHandling(RequestDelegate requestDelegate, MiddlewareOptions options) : base(requestDelegate, options)
         {
+            Repository = Options.Get<ResourceConnection>("MainData").Repository();
         }
 
-        private IRepository Repository => Options.Get<IRepository>("Repository");
+        private readonly IRepository Repository;
 
         protected override async Task OnGet(HttpContext context)
         {
@@ -34,13 +37,30 @@ namespace CardDataService
             {
                 Guid id = GetItemId(context);
 
-                Card card = Repository.Get<Card>(x => x.Id == id);
+                Card card = await Repository.Get<Card>(x => x.Id == id);
                 await SetResponseObject(context, card);
             }
             else
             {
-                Guid emptyId = Guid.Empty;
-                IEnumerable<Card> cards = Repository.GetMany<Card>(x => x.UserId == emptyId);
+                IEnumerable<Card> cards;
+                if (context.Request.Query.ContainsKey("$filter"))
+                {
+                    Term term = Term.Create(context.Request.Query["$filter"])
+                        .Add("eq", Term.EqualValue)
+                        .Add("ne", Term.NotEqualValue)
+                        .Add("and", Term.AndValue)
+                        .Add("or", Term.OrValue)
+                        .Add("gt", Term.GreaterThanValue)
+                        .Add("lt", Term.LessThanValue)
+                        .Add("ge", Term.GreaterThanOrEqualValue)
+                        .Add("le", Term.LessThanValue)
+                        .Add("'", Term.QuoteValue);
+                    cards = await Repository.GetMany(term.ToBoolExpression<Card>());
+                }
+                else
+                {
+                    cards = await Repository.GetMany<Card>();
+                }
                 await SetResponseObject(context, new { value = cards });
             }
         }
@@ -49,7 +69,7 @@ namespace CardDataService
         {
             Guid id = GetItemId(context);
 
-            Card card = Repository.Get<Card>(x => x.Id == id);
+            Card card = await Repository.Get<Card>(x => x.Id == id);
             Card newData = JsonConvert.DeserializeObject<Card>(await GetBodyContent(context));
 
             card.Set(newData);
@@ -71,7 +91,7 @@ namespace CardDataService
         {
             Guid id = GetItemId(context);
 
-            Card card = Repository.Get<Card>(x => x.Id == id);
+            Card card = await Repository.Get<Card>(x => x.Id == id);
             await Repository.Delete(card);
 
             context.Response.StatusCode = 204;
@@ -82,10 +102,11 @@ namespace CardDataService
             context.Response.StatusCode = 500;
             context.Response.ContentType = "application/json";
             await context.Response.WriteAsync(JsonConvert.SerializeObject(
-                new { 
-                    message = ex.Message, 
-                    stackTrace = ex.StackTrace, 
-                    innerException = ex.InnerException.ToString()
+                new
+                {
+                    message = ex.Message,
+                    stackTrace = ex.StackTrace,
+                    innerException = ex?.InnerException?.ToString()
                 }));
         }
 

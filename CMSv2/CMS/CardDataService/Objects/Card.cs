@@ -32,5 +32,9 @@ namespace CardDataService.Objects
         [NotMapped]
         [JsonIgnore]
         public string IdentityName => nameof(Id);
+
+        [NotMapped]
+        [JsonIgnore]
+        public string SourceName => nameof(Card);
     }
 }

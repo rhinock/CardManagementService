@@ -1,5 +1,7 @@
 ﻿using Domain.Interfaces;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BalancerService.Objects
 {
@@ -12,6 +14,12 @@ namespace BalancerService.Objects
 
         public string ResourceConnection { get; set; }
 
+        [NotMapped]
+        [JsonIgnore]
         public string IdentityName => nameof(Number);
+
+        [NotMapped]
+        [JsonIgnore]
+        public string SourceName => nameof(Route);
     }
 }

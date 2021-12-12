@@ -28,15 +28,14 @@ namespace CardDataService
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var resourceConnections = _config.GetSection("ConnectionResources").Get<Dictionary<string, ResourceConnection>>();
-            IRepository repository = new Repository(resourceConnections["MainData"]);
 
             var requestHandlingOptions = new MiddlewareOptions();
             requestHandlingOptions.Add("Prefix", "card");
-            requestHandlingOptions.Add("Repository", repository);
+            requestHandlingOptions.Add("MainData", resourceConnections["MainData"]);
 
             app.UseMiddleware<RequestHandling>(requestHandlingOptions);
         }

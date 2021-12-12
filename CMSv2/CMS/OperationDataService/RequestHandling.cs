@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
+using Domain.Objects;
 using Domain.Interfaces;
 
 using WebTools;
@@ -16,15 +17,18 @@ using OperationDataService.Objects;
 
 using Microsoft.AspNetCore.Http;
 
+using Infrastructure;
+
 namespace OperationDataService
 {
     public class RequestHandling : DataHandlingMiddleware
     {
         public RequestHandling(RequestDelegate requestDelegate, MiddlewareOptions options) : base(requestDelegate, options)
         {
+            Repository = Options.Get<ResourceConnection>("MainData").Repository();
         }
 
-        private IRepository Repository => Options.Get<IRepository>("Repository");
+        private readonly IRepository Repository;
 
         protected override async Task OnGet(HttpContext context)
         {
@@ -34,13 +38,30 @@ namespace OperationDataService
             {
                 Guid id = GetItemId(context);
 
-                Operation operation = Repository.Get<Operation>(x => x.Id == id);
+                Operation operation = await Repository.Get<Operation>(x => x.Id == id);
                 await SetResponseObject(context, operation);
             }
             else
             {
-                Guid emptyId = Guid.Empty;
-                IEnumerable<Operation> operations = Repository.GetMany<Operation>(x => x.Id != emptyId);
+                IEnumerable<Operation> operations;
+                if (context.Request.Query.ContainsKey("$filter"))
+                {
+                    Term term = Term.Create(context.Request.Query["$filter"])
+                        .Add("eq", Term.EqualValue)
+                        .Add("ne", Term.NotEqualValue)
+                        .Add("and", Term.AndValue)
+                        .Add("or", Term.OrValue)
+                        .Add("gt", Term.GreaterThanValue)
+                        .Add("lt", Term.LessThanValue)
+                        .Add("ge", Term.GreaterThanOrEqualValue)
+                        .Add("le", Term.LessThanValue)
+                        .Add("'", Term.QuoteValue);
+                    operations = await Repository.GetMany(term.ToBoolExpression<Operation>());
+                }
+                else
+                {
+                    operations = await Repository.GetMany<Operation>();
+                }
                 await SetResponseObject(context, new { value = operations });
             }
         }
@@ -49,7 +70,7 @@ namespace OperationDataService
         {
             Guid id = GetItemId(context);
 
-            Operation operation = Repository.Get<Operation>(x => x.Id == id);
+            Operation operation = await Repository.Get<Operation>(x => x.Id == id);
             Operation newData = JsonConvert.DeserializeObject<Operation>(await GetBodyContent(context));
 
             operation.Set(newData);
@@ -71,7 +92,7 @@ namespace OperationDataService
         {
             Guid id = GetItemId(context);
 
-            Operation operation = Repository.Get<Operation>(x => x.Id == id);
+            Operation operation = await Repository.Get<Operation>(x => x.Id == id);
             await Repository.Delete(operation);
 
             context.Response.StatusCode = 204;
