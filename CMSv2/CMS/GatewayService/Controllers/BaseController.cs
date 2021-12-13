@@ -1,5 +1,4 @@
-﻿
-using Infrastructure;
+﻿using Infrastructure;
 
 using Domain.Objects;
 using Domain.Interfaces;
@@ -10,19 +9,23 @@ using GatewayService.ResponseModels;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace GatewayService.Controllers
 {
     public abstract class BaseController : ControllerBase
     {
         private readonly IRepository _repository;
-        public BaseController(ResourceConnection connection)
+        private readonly ILogger _logger;
+
+        public BaseController(Dictionary<string, ResourceConnection> connections)
         {
-            _repository = connection.Repository();
+            _repository = connections["MainData"].Repository();
+            _logger = connections["Logger"].Logger();
         }
 
         protected IRepository Repository => _repository;
+        public ILogger Logger => _logger;
 
         protected IActionResult Info()
         {

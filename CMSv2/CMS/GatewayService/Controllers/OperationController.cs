@@ -20,7 +20,7 @@ namespace GatewayService.Controllers
     [Route("api/operation")]
     public class OperationController : BaseController
     {
-        public OperationController(ResourceConnection connection) : base(connection)
+        public OperationController(Dictionary<string, ResourceConnection> connections) : base(connections)
         {
         }
 

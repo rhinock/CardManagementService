@@ -1,16 +1,19 @@
-﻿using Domain.Interfaces;
-using Domain.Objects;
-using GatewayService.Attributes;
-using GatewayService.DataObjects;
-using GatewayService.Enums;
-using GatewayService.Models;
-using GatewayService.ResponseModels;
-using Microsoft.AspNetCore.Mvc;
-using ObjectTools;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
+using ObjectTools;
+
+using Domain.Objects;
+
+using GatewayService.Enums;
+using GatewayService.Models;
+using GatewayService.Attributes;
+using GatewayService.DataObjects;
+using GatewayService.ResponseModels;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace GatewayService.Controllers
 {
@@ -20,7 +23,7 @@ namespace GatewayService.Controllers
     [Route("api/card")]
     public class CardController : BaseController
     {
-        public CardController(ResourceConnection connection) : base(connection)
+        public CardController(Dictionary<string, ResourceConnection> connections) : base(connections)
         {
         }
 

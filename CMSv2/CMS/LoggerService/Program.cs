@@ -15,10 +15,6 @@ namespace LoggerService
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false)
                 .Build();
-            var resourceConnections = config.GetSection("ConnectionResources").Get<Dictionary<string, ResourceConnection>>();
-
-            LogsAddJob job = new LogsAddJob(resourceConnections["MainData"], 800);
-            job.Run();
 
             CreateHostBuilder(args).Build().Run();
         }

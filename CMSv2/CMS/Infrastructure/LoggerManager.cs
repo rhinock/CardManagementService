@@ -2,6 +2,8 @@
 using Domain.Objects;
 using Domain.Interfaces;
 
+using DataServices;
+
 using FileDataStore;
 
 namespace Infrastructure
@@ -15,8 +17,7 @@ namespace Infrastructure
                 case ConnectionType.Data:
                     return new FileLogger(connection);
                 case ConnectionType.Service:
-                    //return new DataServiceClient(connection);
-                    return null;
+                    return new NetLogger(connection);
                 default:
                     return null;
 

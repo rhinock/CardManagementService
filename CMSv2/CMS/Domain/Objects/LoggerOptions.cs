@@ -19,5 +19,10 @@ namespace Domain.Objects
         {
             return (T)_content[name];
         }
+
+        public bool Has(string name)
+        {
+            return _content.ContainsKey(name);
+        }
     }
 }

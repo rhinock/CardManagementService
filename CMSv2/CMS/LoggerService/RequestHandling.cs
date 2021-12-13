@@ -1,25 +1,29 @@
 ﻿
 using System;
 using System.Threading.Tasks;
-using Domain.Interfaces;
 
-using Domain.Objects;
-using Infrastructure;
-using Newtonsoft.Json;
 using WebTools;
 
+using Domain.Objects;
+using Domain.Interfaces;
+
+using Infrastructure;
+
+using Newtonsoft.Json;
+
 using Microsoft.AspNetCore.Http;
-using LoggerService.Enums;
 
 namespace LoggerService
 {
     public class RequestHandling
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger _logger;
 
-        public RequestHandling(RequestDelegate next)
+        public RequestHandling(RequestDelegate next, MiddlewareOptions options)
         {
             _next = next;
+            _logger = GetLogger(options);
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -31,13 +35,13 @@ namespace LoggerService
                 string requestData = await context.Request.GetBodyAsStringAsync();
                 Message message = JsonConvert.DeserializeObject<Message>(requestData);
 
-                if(message?.Value == null)
+                if (message?.Value == null)
                 {
                     context.Response.StatusCode = 400;
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(new { status = "Error", message = "Require \"Message\"" }));
                 }
-                else if(method != "POST")
+                else if (method != "POST")
                 {
                     context.Response.StatusCode = 405;
                     context.Response.ContentType = "application/json";
@@ -45,40 +49,33 @@ namespace LoggerService
                 }
                 else
                 {
-                    lock(AppContext.Logs)
+                    switch (path)
                     {
-                        switch (path)
-                        {
-                            case "/info":
-                                AppContext.Logs.Add(new Log
-                                {
-                                    Content = message.Value,
-                                    Type = LogType.Info
-                                });
-                                break;
-                            case "/error":
-                                AppContext.Logs.Add(new Log
-                                {
-                                    Content = message.Value,
-                                    Type = LogType.Info
-                                });
-                                break;
-                            default:
-                                context.Response.StatusCode = 404;
-                                return;
-                        }
+                        case "/info":
+                            await _logger.Info(message.Value);
+                            break;
+                        case "/error":
+                            await _logger.Error(message.Value);
+                            break;
+                        default:
+                            context.Response.StatusCode = 404;
+                            return;
                     }
-
-                    context.Response.StatusCode = 200;
-                    context.Response.ContentType = "application/json";
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(new { status = "OK" }));
                 }
+
+                context.Response.StatusCode = 200;
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(new { status = "OK" }));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 context.Response.StatusCode = 500;
                 context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(new { status = "Error", message = ex.ToString() }));
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(new
+                {
+                    status = "Error",
+                    message = ex.ToString()
+                }));
             }
         }
 

@@ -23,7 +23,7 @@ namespace GatewayService
         {
             var resourceConnections = Configuration.GetSection("ConnectionResources").Get<Dictionary<string, ResourceConnection>>();
 
-            services.Add(new ServiceDescriptor(typeof(ResourceConnection), resourceConnections["MainData"]));
+            services.Add(new ServiceDescriptor(typeof(Dictionary<string, ResourceConnection>), resourceConnections));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
