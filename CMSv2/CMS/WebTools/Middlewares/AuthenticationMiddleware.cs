@@ -14,11 +14,13 @@ namespace WebTools.Middlewares
             _options = options;
         }
 
+        public MiddlewareOptions Options => _options;
+
         public async Task InvokeAsync(HttpContext context)
         {
             string authorizationValue = context.Request.Headers["Authorization"];
 
-            if (Auth(authorizationValue))
+            if (await Auth(authorizationValue))
             {
                 await _next.Invoke(context);
             }
@@ -28,7 +30,7 @@ namespace WebTools.Middlewares
             }
         }
 
-        public abstract bool Auth(string authorizationValue);
+        public abstract Task<bool> Auth(string authorizationValue);
 
         public virtual void OnError(HttpContext context)
         {
