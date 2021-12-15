@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Reflection;
 
 using ObjectTools.Attributes;
@@ -53,6 +55,18 @@ namespace ObjectTools
                     }
                 }
             }
+        }
+
+        public static Dictionary<string, object> AsDictionary<T>(this T src)
+        {
+            Dictionary<string, object> result = new Dictionary<string, object>();
+
+            foreach (var property in typeof(T).GetProperties())
+            {
+                result.Add(property.Name, property.GetValue(src));
+            }
+
+            return result;
         }
     }
 }

@@ -18,6 +18,8 @@ using OperationDataService.Objects;
 using Microsoft.AspNetCore.Http;
 
 using Infrastructure;
+using OperationDataService.Models;
+using Domain.Enums;
 
 namespace OperationDataService
 {
@@ -83,10 +85,34 @@ namespace OperationDataService
 
         protected override async Task OnPost(HttpContext context)
         {
-            Operation newData = JsonConvert.DeserializeObject<Operation>(await context.Request.GetBodyAsStringAsync());
-            await Repository.Create(newData);
+            OperationModel model = JsonConvert.DeserializeObject<OperationModel>(await context.Request.GetBodyAsStringAsync());
+            Guid id;
 
-            context.Response.Headers.Add("ObjectId", newData.Id.ToString());
+            if (model.CardId.HasValue)
+            {
+                Operation operation = model.To<OperationModel, Operation>();
+                await Repository.Create(operation);
+                id = operation.Id;
+            }
+            else
+            {
+                Operation operation = model.To<OperationModel, Operation>();
+                operation.CardId = Guid.NewGuid();
+                await Repository.Create(operation);
+
+                model.Card.Id = operation.CardId;
+
+                IEvents events = Options.Get<ResourceConnection>("MessageData").Events();
+                events.Add(new Event
+                {
+                    Arg = model.Card.AsDictionary(),
+                    EventType = EventType.MessageAboutCreating
+                });
+
+                id = operation.Id;
+            }
+
+            context.Response.Headers.Add("ObjectId", id.ToString());
             context.Response.StatusCode = 201;
         }
 
@@ -110,7 +136,7 @@ namespace OperationDataService
                 {
                     message = ex.Message,
                     stackTrace = ex.StackTrace,
-                    innerException = ex.InnerException.ToString()
+                    innerException = ex.InnerException?.ToString()
                 }));
         }
 

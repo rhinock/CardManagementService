@@ -9,6 +9,7 @@
     <ProjectReference Include="..\DataServices\DataServices.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\FileDataStore\FileDataStore.csproj" />
+    <ProjectReference Include="..\Messaging\Messaging.csproj" />
   </ItemGroup>
 
 </Project>

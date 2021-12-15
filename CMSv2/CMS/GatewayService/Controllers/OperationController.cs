@@ -69,30 +69,30 @@ namespace GatewayService.Controllers
         public async Task<ActionResult> CreateOperation([FromBody] OperationCreateModel model)
         {
             Card card;
-            Operation operation;
+            Operation operation = model.To<OperationCreateModel, Operation>();
 
             if (model.CardId.HasValue)
             {
                 Guid cardId = model.CardId.Value;
-                card = await Repository.Get<Card>(c => c.Id == cardId);
+                card = await Repository.Get<Card>(c => c.Id == cardId); 
+                
+                if (card == null)
+                {
+                    return await ErrorAsync("Card wasn't found", BusinessResult.NotFound);
+                }
+                operation.CardId = card.Id;
             }
             else if (model.Card != null)
             {
                 card = model.Card.To<OperationCardModel, Card>();
                 await Repository.Create(card);
+                operation.Card = card;
             }
             else
             {
                 return await ErrorAsync("CardId should be provided", BusinessResult.InvalidModel);
             }
 
-            if (card == null)
-            {
-                return await ErrorAsync("Card wasn't found", BusinessResult.NotFound);
-            }
-
-            operation = model.To<OperationCreateModel, Operation>();
-            operation.CardId = card.Id;
             await Repository.Create(operation);
 
             return await InfoAsync(operation.Id);

@@ -30,6 +30,7 @@ namespace OperationDataService
             var requestHandlingOptions = new MiddlewareOptions();
             requestHandlingOptions.Add("Prefix", "operation");
             requestHandlingOptions.Add("MainData", resourceConnections["MainData"]);
+            requestHandlingOptions.Add("MessageData", resourceConnections["MessageData"]);
 
             app.UseMiddleware<RequestHandling>(requestHandlingOptions);
         }

@@ -1,5 +1,7 @@
+using CardDataService.Objects;
 using Domain.Interfaces;
 using Domain.Objects;
+using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -36,6 +38,13 @@ namespace CardDataService
             var requestHandlingOptions = new MiddlewareOptions();
             requestHandlingOptions.Add("Prefix", "card");
             requestHandlingOptions.Add("MainData", resourceConnections["MainData"]);
+
+            IEvents events = resourceConnections["MessageData"].Events();
+            events.Handle(evnt =>
+            {
+                MessageHandling handling = new MessageHandling(resourceConnections["MainData"]);
+                handling.Run(evnt);
+            });
 
             app.UseMiddleware<RequestHandling>(requestHandlingOptions);
         }

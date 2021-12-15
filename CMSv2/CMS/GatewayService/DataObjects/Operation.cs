@@ -7,9 +7,11 @@ namespace GatewayService.DataObjects
     {
         public Guid Id { get; set; }
 
-        public Guid CardId { get; set; }
+        public Guid? CardId { get; set; }
         public string Name { get; set; }
         public decimal Amount { get; set; }
+
+        public Card Card { get; set; }
         
         public string IdentityName => nameof(Id);
 
