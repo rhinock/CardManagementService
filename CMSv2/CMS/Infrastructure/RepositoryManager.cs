@@ -1,4 +1,5 @@
 ﻿using PgDataStore;
+
 using DataServices;
 
 using Domain.Enums;
@@ -12,14 +13,13 @@ namespace Infrastructure
         public static IRepository GetRepository(ResourceConnection connection)
         {
             switch(connection.Type)
-                {
+            {
                 case ConnectionType.Data:
                     return new Repository(connection);
                 case ConnectionType.Service:
                     return new DataServiceClient(connection);
                 default:
                     return null;
-
             }
         }
 

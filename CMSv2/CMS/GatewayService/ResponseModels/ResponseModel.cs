@@ -9,7 +9,7 @@ namespace GatewayService.ResponseModels
 
         public override string ToString()
         {
-            return $"{(int)Result} - {Result}: {Message}";
+            return $"{{ Code: {Result}, Message: {Message} }}";
         }
     }
 }

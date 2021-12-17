@@ -20,7 +20,6 @@ namespace Infrastructure
                     return new NetLogger(connection);
                 default:
                     return null;
-
             }
         }
 

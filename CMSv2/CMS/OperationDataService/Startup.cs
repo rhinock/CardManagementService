@@ -1,6 +1,10 @@
 using WebTools;
 
+using Infrastructure;
+
 using Domain.Objects;
+
+using OperationDataService.Objects;
 
 using System.Collections.Generic;
 
@@ -26,13 +30,20 @@ namespace OperationDataService
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var resourceConnections = _config.GetSection("ConnectionResources").Get<Dictionary<string, ResourceConnection>>();
+            ResourceConnection mainResourceConnection = resourceConnections["MainData"];
 
-            var requestHandlingOptions = new MiddlewareOptions();
-            requestHandlingOptions.Add("Prefix", "operation");
-            requestHandlingOptions.Add("MainData", resourceConnections["MainData"]);
-            requestHandlingOptions.Add("MessageData", resourceConnections["MessageData"]);
+            mainResourceConnection.DataTool<Operation>().TryInitData();
 
-            app.UseMiddleware<RequestHandling>(requestHandlingOptions);
+            app.UseMiddleware<ErrorHandling>(new MiddlewareOptions(new Dictionary<string, object>
+            {
+                { "Logger", resourceConnections["Logger"] },
+            }));
+            app.UseMiddleware<RequestHandling>(new MiddlewareOptions(new Dictionary<string, object>
+            {
+                { "Prefix", "operation" },
+                { "MainData", mainResourceConnection },
+                { "MessageData", resourceConnections["MessageData"] }
+            }));
         }
     }
 }

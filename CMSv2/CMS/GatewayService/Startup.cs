@@ -1,12 +1,17 @@
+using WebTools;
+
 using Domain.Objects;
+
+using System.Collections.Generic;
+
+using GatewayService.Attributes;
+
+using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using System.Collections.Generic;
-using WebTools;
 
 namespace GatewayService
 {
@@ -21,11 +26,11 @@ namespace GatewayService
 
         private Dictionary<string, ResourceConnection> _resourceConnections;
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             _resourceConnections = Configuration.GetSection("ConnectionResources").Get<Dictionary<string, ResourceConnection>>();
             services.Add(new ServiceDescriptor(typeof(Dictionary<string, ResourceConnection>), _resourceConnections));
+            services.AddScoped<LoggingAttribute>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -34,7 +39,6 @@ namespace GatewayService
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -48,9 +52,15 @@ namespace GatewayService
 
             app.UseRouting();
 
-            MiddlewareOptions options = new MiddlewareOptions();
-            options.Add("Auth", _resourceConnections["Auth"]);
-            app.UseMiddleware<Authentication>(options);
+            app.UseMiddleware<ErrorHandling>(new MiddlewareOptions(new Dictionary<string, object>
+            {
+                { "Logger", _resourceConnections["Logger"] }
+            }));
+
+            app.UseMiddleware<Authentication>(new MiddlewareOptions(new Dictionary<string, object> 
+            {
+                { "Auth", _resourceConnections["Auth"] }
+            }));
 
             app.UseEndpoints(endpoints =>
             {

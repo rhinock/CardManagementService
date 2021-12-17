@@ -1,5 +1,7 @@
 ﻿using System;
+
 using EasyNetQ;
+
 using Domain.Objects;
 using Domain.Interfaces;
 

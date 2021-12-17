@@ -1,6 +1,6 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.ComponentModel.DataAnnotations;
 
 namespace GatewayService.Types
 {

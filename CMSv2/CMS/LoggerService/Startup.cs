@@ -1,3 +1,4 @@
+using WebTools;
 
 using Domain.Objects;
 
@@ -7,7 +8,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebTools;
 
 namespace LoggerService
 {
@@ -26,10 +26,11 @@ namespace LoggerService
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var resourceConnections = _config.GetSection("ConnectionResources").Get<Dictionary<string, ResourceConnection>>();
-            MiddlewareOptions middlewareOptions = new MiddlewareOptions();
-            middlewareOptions.Add("MainData", resourceConnections["MainData"]);
 
-            app.UseMiddleware<RequestHandling>(middlewareOptions);
+            app.UseMiddleware<RequestHandling>(new MiddlewareOptions(new Dictionary<string, object> 
+            {
+                { "MainData", resourceConnections["MainData"] }
+            }));
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿using GatewayService.Attributes;
-using GatewayService.Types;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
+
+using GatewayService.Types;
+using GatewayService.Attributes;
 
 namespace GatewayService.Models
 {
@@ -32,21 +33,14 @@ namespace GatewayService.Models
         {
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"Id: {Id}");
-            stringBuilder.AppendLine($"Cvc: {Regex.Replace(Cvc, @"[\d]", "*")}");
+            stringBuilder.Append($"Id: {Id}, ");
+            stringBuilder.Append($"Cvc: {Regex.Replace(Cvc, @"[\d]", "*")}, ");
+            stringBuilder.Append($"Pan: {Regex.Replace(Pan.Substring(0, Pan.Length - 4), @"\d", "*")}{Pan.Substring(Pan.Length - 4, 4)}, ");
+            stringBuilder.Append($"Expire: {Expire?.Month}/{Expire?.Year}, ");
+            stringBuilder.Append($"IsDefault: {IsDefault}, ");
+            stringBuilder.Append($"UserId: {UserId}");
 
-            stringBuilder.AppendLine($"Pan: " +
-                $"{Regex.Replace(Pan.Substring(0, Pan.Length - 4), @"\d", "*")}" +
-                $"{Pan.Substring(Pan.Length - 4, 4)}");
-
-            stringBuilder.AppendLine($"Expire: " +
-                $"Month {Expire?.Month}, " +
-                $"Year {Expire?.Year}");
-
-            stringBuilder.AppendLine($"IsDefault: {IsDefault}");
-            stringBuilder.AppendLine($"UserId: {UserId}");
-
-            return stringBuilder.ToString();
+            return $"{{ {stringBuilder} }}";
         }
     }
 }

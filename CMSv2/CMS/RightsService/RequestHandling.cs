@@ -1,28 +1,31 @@
-﻿using Domain.Interfaces;
+﻿using WebTools;
+using WebTools.Middlewares;
+
 using Domain.Objects;
+using Domain.Interfaces;
+
 using Infrastructure;
-using Microsoft.AspNetCore.Http;
+
 using Newtonsoft.Json;
+
 using RightsService.Objects;
+
 using System.Threading.Tasks;
-using WebTools;
+
+using Microsoft.AspNetCore.Http;
 
 namespace RightsService
 {
-    public class RequestHandling
+    public class RequestHandling : BaseMiddleware
     {
-        private readonly RequestDelegate _next;
-        private readonly MiddlewareOptions _options;
         private readonly IRepository _repository;
 
-        public RequestHandling(RequestDelegate next, MiddlewareOptions options)
+        public RequestHandling(RequestDelegate next, MiddlewareOptions options) : base(next, options)
         {
-            _next = next;
-            _options = options;
-            _repository = RepositoryManager.GetRepository(_options.Get<ResourceConnection>("MainData"));
+            _repository = RepositoryManager.GetRepository(options.Get<ResourceConnection>("MainData"));
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public override async Task InvokeAsync(HttpContext context)
         {
             string path = context.Request.Path.Value.ToLower();
 

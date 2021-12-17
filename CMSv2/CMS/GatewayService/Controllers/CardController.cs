@@ -33,7 +33,7 @@ namespace GatewayService.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id:guid}")]
-        [Logging]
+        [ServiceFilter(typeof(LoggingAttribute))]
         [ProducesResponseType(typeof(ResponseModel), 200)]
         [ProducesResponseType(typeof(ResponseModel), 400)]
         public async Task<ActionResult> GetCardById(Guid id)
@@ -52,7 +52,7 @@ namespace GatewayService.Controllers
         /// <param name="id"></param>
         /// <returns>Cards that belong to the user</returns>
         [HttpGet("user/{id:guid}")]
-        [Logging]
+        [ServiceFilter(typeof(LoggingAttribute))]
         [ProducesResponseType(typeof(ResponseModel), 200)]
         public async Task<ActionResult> GetUserCards(Guid id)
         {
@@ -66,7 +66,7 @@ namespace GatewayService.Controllers
         /// </summary>
         /// <returns>List of cards</returns>
         [HttpGet]
-        [Logging]
+        [ServiceFilter(typeof(LoggingAttribute))]
         [ProducesResponseType(typeof(ResponseModel), 200)]
         public async Task<ActionResult> GetCards()
         {
@@ -85,7 +85,7 @@ namespace GatewayService.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns>A new card for the user</returns>
-        [Logging]
+        [ServiceFilter(typeof(LoggingAttribute))]
         [ModelValidation]
         [HttpPost]
         [ProducesResponseType(typeof(ResponseModel), 200)]
@@ -107,7 +107,7 @@ namespace GatewayService.Controllers
         /// </summary>
         /// <returns></returns>
         [ModelValidation]
-        [Logging]
+        [ServiceFilter(typeof(LoggingAttribute))]
         [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(ResponseModel), 200)]
         [ProducesResponseType(typeof(ResponseModel), 400)]
@@ -133,7 +133,7 @@ namespace GatewayService.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Logging]
+        [ServiceFilter(typeof(LoggingAttribute))]
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(typeof(ResponseModel), 200)]
         [ProducesResponseType(typeof(ResponseModel), 400)]

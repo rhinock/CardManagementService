@@ -1,12 +1,17 @@
-﻿using Domain.Interfaces;
+﻿using WebTools;
+using WebTools.Middlewares;
+
+using Infrastructure;
+
 using Domain.Objects;
+using Domain.Interfaces;
+
 using GatewayService.Enums;
 using GatewayService.ResponseModels;
-using Infrastructure;
-using Microsoft.AspNetCore.Http;
+
 using System.Threading.Tasks;
-using WebTools;
-using WebTools.Middlewares;
+
+using Microsoft.AspNetCore.Http;
 
 namespace GatewayService
 {

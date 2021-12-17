@@ -10,7 +10,7 @@ namespace GatewayService.Models
 
         public override string ToString()
         {
-            return $"Id: {Id}; Name: {Name}; Amount: {Amount};";
+            return $"{{ Id: {Id}, Name: {Name}, Amount: {Amount} }}";
         }
     }
 }

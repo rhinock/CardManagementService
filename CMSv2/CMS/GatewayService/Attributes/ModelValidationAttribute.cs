@@ -1,11 +1,14 @@
-﻿using GatewayService.Enums;
+﻿using WebTools;
+
 using System.Linq;
+using System.Reflection;
+
+using GatewayService.Enums;
+using GatewayService.Models;
 using GatewayService.ResponseModels;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using GatewayService.Models;
-using System.Reflection;
-using WebTools;
 
 namespace GatewayService.Attributes
 {

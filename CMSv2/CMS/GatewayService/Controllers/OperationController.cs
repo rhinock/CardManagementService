@@ -30,7 +30,7 @@ namespace GatewayService.Controllers
         /// <param name="cardId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Logging]
+        [ServiceFilter(typeof(LoggingAttribute))]
         [ProducesResponseType(typeof(ResponseModel), 200)]
         [ProducesResponseType(typeof(ResponseModel), 400)]
         public async Task<ActionResult> GetOperationByCardId(Guid? cardId)
@@ -61,7 +61,7 @@ namespace GatewayService.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns>Operation with new card</returns>
-        [Logging]
+        [ServiceFilter(typeof(LoggingAttribute))]
         [ModelValidation]
         [HttpPost]
         [ProducesResponseType(typeof(ResponseModel), 200)]
@@ -85,7 +85,6 @@ namespace GatewayService.Controllers
             else if (model.Card != null)
             {
                 card = model.Card.To<OperationCardModel, Card>();
-                await Repository.Create(card);
                 operation.Card = card;
             }
             else

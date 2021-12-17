@@ -1,8 +1,8 @@
-﻿
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 using WebTools;
+using WebTools.Middlewares;
 
 using Domain.Objects;
 using Domain.Interfaces;
@@ -15,18 +15,16 @@ using Microsoft.AspNetCore.Http;
 
 namespace LoggerService
 {
-    public class RequestHandling
+    public class RequestHandling : BaseMiddleware
     {
-        private readonly RequestDelegate _next;
         private readonly ILogger _logger;
 
-        public RequestHandling(RequestDelegate next, MiddlewareOptions options)
+        public RequestHandling(RequestDelegate next, MiddlewareOptions options) : base(next, options)
         {
-            _next = next;
             _logger = GetLogger(options);
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public override async Task InvokeAsync(HttpContext context)
         {
             try
             {

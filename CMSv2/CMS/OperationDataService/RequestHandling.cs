@@ -3,8 +3,11 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
+using Domain.Enums;
 using Domain.Objects;
 using Domain.Interfaces;
+
+using Infrastructure;
 
 using WebTools;
 using WebTools.Middlewares;
@@ -13,13 +16,10 @@ using ObjectTools;
 
 using Newtonsoft.Json;
 
+using OperationDataService.Models;
 using OperationDataService.Objects;
 
 using Microsoft.AspNetCore.Http;
-
-using Infrastructure;
-using OperationDataService.Models;
-using Domain.Enums;
 
 namespace OperationDataService
 {
@@ -106,6 +106,7 @@ namespace OperationDataService
                 events.Add(new Event
                 {
                     Arg = model.Card.AsDictionary(),
+                    SourceName = nameof(model.Card),
                     EventType = EventType.MessageAboutCreating
                 });
 
@@ -125,19 +126,6 @@ namespace OperationDataService
 
             context.Response.Headers.Add("ObjectId", operation.Id.ToString());
             context.Response.StatusCode = 204;
-        }
-
-        protected override async Task OnError(HttpContext context, Exception ex)
-        {
-            context.Response.StatusCode = 500;
-            context.Response.ContentType = "application/json";
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(
-                new
-                {
-                    message = ex.Message,
-                    stackTrace = ex.StackTrace,
-                    innerException = ex.InnerException?.ToString()
-                }));
         }
 
         private Guid GetItemId(HttpContext context)

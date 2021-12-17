@@ -1,27 +1,28 @@
-﻿using CardDataService.Objects;
+﻿using System;
 using Domain.Enums;
 using Domain.Objects;
+
 using Infrastructure;
-using ObjectTools;
-using System;
-using System.Collections.Generic;
+
+using CardDataService.Objects;
 
 namespace CardDataService
 {
-    public class MessageHandling
+    public class MessageCatching
     {
         private readonly ResourceConnection _connection;
 
-        public MessageHandling(ResourceConnection connection)
+        public MessageCatching(ResourceConnection connection)
         {
             _connection = connection;
         }
 
         public async void Run(Event @event)
         {
-            if(@event.EventType == EventType.MessageAboutCreating)
+            if (@event.EventType == EventType.MessageAboutCreating 
+                && @event.SourceName.ToLower() == "card")
             {
-                await _connection.Repository().Create(new Card 
+                await _connection.Repository().Create(new Card
                 {
                     Id = Guid.Parse(@event.Arg["Id"]?.ToString()),
                     Cvc = @event.Arg["Cvc"]?.ToString(),

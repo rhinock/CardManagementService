@@ -135,7 +135,6 @@ namespace ObjectTools
             return Expression.Lambda<Func<TIn, bool>>(current, parameter);
         }
 
-
         private object ConvertValue(string value, Type type)
         {
             if (value == NullValue)
@@ -167,7 +166,6 @@ namespace ObjectTools
                     throw new Exception($"Unsupported type {type.Name}");
             }
         }
-
 
         public static Term Create(string expression)
         {

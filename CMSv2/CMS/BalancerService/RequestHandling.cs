@@ -1,4 +1,5 @@
 ﻿using WebTools;
+using WebTools.Middlewares;
 
 using BalancerService.Objects;
 
@@ -15,24 +16,21 @@ using Infrastructure;
 
 namespace BalancerService
 {
-    public class RequestHandling
+    public class RequestHandling : BaseMiddleware
     {
-        private readonly RequestDelegate _next;
-        private readonly MiddlewareOptions _options;
         private readonly IRepository _repository;
 
-        public RequestHandling(RequestDelegate next, MiddlewareOptions options)
+        public RequestHandling(RequestDelegate next, MiddlewareOptions options) 
+            : base(next, options)
         {
-            _next = next;
-            _options = options;
-            _repository = RepositoryManager.GetRepository(_options.Get<ResourceConnection>("MainData"));
+            _repository = RepositoryManager.GetRepository(options.Get<ResourceConnection>("MainData"));
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public override async Task InvokeAsync(HttpContext context)
         {
             string path = context.Request.Path.Value.ToLower().Replace("/", "");
-
             Route route = await _repository.Get<Route>(x => x.ObjectName == path);
+
             if(route == null)
             {
                 context.Response.StatusCode = 404;

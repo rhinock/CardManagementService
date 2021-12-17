@@ -4,11 +4,13 @@ namespace WebTools
 {
     public class MiddlewareOptions
     {
-        private Dictionary<string, object> _content;
+        private readonly Dictionary<string, object> _content;
 
-        public MiddlewareOptions()
+        public MiddlewareOptions(IEnumerable<KeyValuePair<string, object>> collection = null)
         {
-            _content = new Dictionary<string, object>();
+            _content = collection != null ? 
+                new Dictionary<string, object>(collection) 
+                : new Dictionary<string, object>();
         }
 
         public void Add(string name, object value)

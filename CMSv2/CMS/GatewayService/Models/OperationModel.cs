@@ -8,7 +8,7 @@ namespace GatewayService.Models
 
         public override string ToString()
         {
-            return $"{base.ToString()} CardId: {CardId}";
+            return $"{base.ToString().TrimEnd('}').TrimEnd(' ')}, CardId: {CardId} }}";
         }
     }
 }

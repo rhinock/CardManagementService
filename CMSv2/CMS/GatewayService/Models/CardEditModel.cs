@@ -9,7 +9,7 @@ namespace GatewayService.Models
 
         public override string ToString()
         {
-            return $"Name: {Name}";
+            return $"{{Name: {Name}}}";
         }
     }
 }

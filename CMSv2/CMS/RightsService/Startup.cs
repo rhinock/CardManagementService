@@ -1,6 +1,10 @@
 using WebTools;
 
+using Infrastructure;
+
 using Domain.Objects;
+
+using RightsService.Objects;
 
 using System.Collections.Generic;
 
@@ -8,7 +12,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 
 namespace RightsService
 {
@@ -24,15 +27,22 @@ namespace RightsService
         {
         }
 
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var resourceConnections = _config.GetSection("ConnectionResources").Get<Dictionary<string, ResourceConnection>>();
+            ResourceConnection mainResourceConnection = resourceConnections["MainData"];
 
-            MiddlewareOptions options = new MiddlewareOptions();
-            options.Add("MainData", resourceConnections["MainData"]);
+            mainResourceConnection.DataTool<User>().TryInitData();
 
-            app.UseMiddleware<RequestHandling>(options);
+            app.UseMiddleware<ErrorHandling>(new MiddlewareOptions(new Dictionary<string, object>
+            {
+                { "Logger", resourceConnections["Logger"] },
+            }));
+            app.UseMiddleware<RequestHandling>(new MiddlewareOptions(new Dictionary<string, object>
+            {
+                { "Prefix", "operation" },
+                { "MainData", mainResourceConnection }
+            }));
         }
     }
 }

@@ -16,13 +16,15 @@ using Newtonsoft.Json;
 using CardDataService.Objects;
 
 using Microsoft.AspNetCore.Http;
+
 using Infrastructure;
 
 namespace CardDataService
 {
     public class RequestHandling : DataHandlingMiddleware
     {
-        public RequestHandling(RequestDelegate requestDelegate, MiddlewareOptions options) : base(requestDelegate, options)
+        public RequestHandling(RequestDelegate requestDelegate, MiddlewareOptions options)
+            : base(requestDelegate, options)
         {
             Repository = Options.Get<ResourceConnection>("MainData").Repository();
         }
@@ -43,6 +45,7 @@ namespace CardDataService
             else
             {
                 IEnumerable<Card> cards;
+
                 if (context.Request.Query.ContainsKey("$filter"))
                 {
                     Term term = Term.Create(context.Request.Query["$filter"])
@@ -55,12 +58,14 @@ namespace CardDataService
                         .Add("ge", Term.GreaterThanOrEqualValue)
                         .Add("le", Term.LessThanValue)
                         .Add("'", Term.QuoteValue);
+
                     cards = await Repository.GetMany(term.ToBoolExpression<Card>());
                 }
                 else
                 {
                     cards = await Repository.GetMany<Card>();
                 }
+
                 await SetResponseObject(context, new { value = cards });
             }
         }
@@ -98,19 +103,6 @@ namespace CardDataService
 
             context.Response.Headers.Add("ObjectId", card.Id.ToString());
             context.Response.StatusCode = 204;
-        }
-
-        protected override async Task OnError(HttpContext context, Exception ex)
-        {
-            context.Response.StatusCode = 500;
-            context.Response.ContentType = "application/json";
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(
-                new
-                {
-                    message = ex.Message,
-                    stackTrace = ex.StackTrace,
-                    innerException = ex?.InnerException?.ToString()
-                }));
         }
 
         private Guid GetItemId(HttpContext context)

@@ -38,7 +38,6 @@ namespace DataServices
             await SendAsync(InfoLevel, message);
         }
 
-
         private async Task SendAsync(string path, string message)
         {
             await Task.Delay(0);
@@ -54,11 +53,14 @@ namespace DataServices
             {
                 using (WebClient client = new WebClient())
                 {
-                    client.UploadString($"{_connection.Value}/{path}", JsonConvert.SerializeObject(new { message }));
+                    client.UploadString($"{_connection.Value}/{path}", 
+                        JsonConvert.SerializeObject(new 
+                        {
+                            message = $"{_options.Get<string>("Origin")}, {message}" 
+                        }));
                 }
             }
-            catch(Exception ex) 
-            { var t = ex; }
+            catch { }
         }
 
         private bool AllowSend(string level)
@@ -90,6 +92,16 @@ namespace DataServices
                     if (_levels.Contains(minlevelValue))
                     {
                         options.Add("MinLevel", minlevelValue);
+                    }
+                }
+
+                string originValues = parts.FirstOrDefault(x => x.ToLower().Contains("origin="));
+                if (originValues != null)
+                {
+                    string originValue = originValues.Split('=').LastOrDefault()?.Trim();
+                    if (!string.IsNullOrEmpty(originValue))
+                    {
+                        options.Add("Origin", originValue);
                     }
                 }
             }

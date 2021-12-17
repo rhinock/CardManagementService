@@ -1,6 +1,8 @@
-﻿using GatewayService.Types;
+﻿using System;
+
 using Domain.Interfaces;
-using System;
+
+using GatewayService.Types;
 
 namespace GatewayService.DataObjects
 {

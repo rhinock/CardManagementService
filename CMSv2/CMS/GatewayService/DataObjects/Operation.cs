@@ -1,5 +1,5 @@
-﻿using Domain.Interfaces;
-using System;
+﻿using System;
+using Domain.Interfaces;
 
 namespace GatewayService.DataObjects
 {

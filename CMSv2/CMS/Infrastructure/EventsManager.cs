@@ -1,5 +1,4 @@
-﻿
-using Messaging;
+﻿using Messaging;
 
 using Domain.Objects;
 using Domain.Interfaces;

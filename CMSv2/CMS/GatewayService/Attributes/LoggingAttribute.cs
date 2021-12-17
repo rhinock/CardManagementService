@@ -1,6 +1,11 @@
-﻿using Domain.Interfaces;
+﻿using System;
+using System.Collections.Generic;
 
-using GatewayService.Controllers;
+using Domain.Objects;
+using Domain.Interfaces;
+
+using Infrastructure;
+
 using GatewayService.ResponseModels;
 
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +15,14 @@ namespace GatewayService.Attributes
 {
     public class LoggingAttribute : ActionFilterAttribute
     {
+        private readonly ILogger _logger;
 
-        public override void OnActionExecuting(ActionExecutingContext context)
+        public LoggingAttribute(Dictionary<string, ResourceConnection> connections)
+        {
+            _logger = connections["Logger"].Logger();
+    }
+
+    public override void OnActionExecuting(ActionExecutingContext context)
         {
             string message = string.Empty;
             foreach (var item in context.ActionArguments)
@@ -20,8 +31,11 @@ namespace GatewayService.Attributes
                 message = $"{message}, {item}={value}";
             }
 
-            message = $"Path: {context.HttpContext.Request.Path}; Request ID: {context.HttpContext.TraceIdentifier}; Method: {context.HttpContext.Request.Method}; Params: {message}";
-            GetLogger(context).Info(message);
+            string requestId = Guid.NewGuid().ToString("N").ToLower();
+            context.HttpContext.Request.Headers.Add("X-Request-Id", requestId);
+
+            message = $"Path: {context.HttpContext.Request.Path}; Request ID: {requestId}; Method: {context.HttpContext.Request.Method}; Params: {message}";
+            _logger.Info(message);
         }
 
         public override void OnActionExecuted(ActionExecutedContext context)
@@ -35,37 +49,8 @@ namespace GatewayService.Attributes
                     message = responseModel.ToString();
                 }
 
-                message = $"Path: {context.HttpContext.Request.Path}; Request ID: {context.HttpContext.TraceIdentifier}; Method: {context.HttpContext.Request.Method}; Response: {message}";
-                GetLogger(context).Info(message);
-            }
-        }
-
-        private ILogger GetLogger(FilterContext context)
-        {
-            BaseController thisController = null;
-
-            if(context is ActionExecutingContext actionExecutingContext)
-            {
-                if(actionExecutingContext.Controller is BaseController)
-                {
-                    thisController = (BaseController)actionExecutingContext.Controller;
-                }
-            }
-            else if(context is ActionExecutedContext actionExecutedContext)
-            {
-                if (actionExecutedContext.Controller is BaseController)
-                {
-                    thisController = (BaseController)actionExecutedContext.Controller;
-                }
-            }
-
-            if(thisController != null)
-            {
-                return thisController.Logger;
-            }
-            else
-            {
-                return null;
+                message = $"Path: {context.HttpContext.Request.Path}; Request ID: {context.HttpContext.Request.Headers["X-Request-Id"]}; Method: {context.HttpContext.Request.Method}; Response: {message}";
+                _logger.Info(message);
             }
         }
     }

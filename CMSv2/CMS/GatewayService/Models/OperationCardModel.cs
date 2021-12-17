@@ -1,5 +1,6 @@
-﻿using GatewayService.Attributes;
-using GatewayService.Types;
+﻿using GatewayService.Types;
+using GatewayService.Attributes;
+
 using System.ComponentModel.DataAnnotations;
 
 namespace GatewayService.Models

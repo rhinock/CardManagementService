@@ -1,19 +1,18 @@
-using CardDataService.Objects;
-using Domain.Interfaces;
-using Domain.Objects;
+using WebTools;
+
 using Infrastructure;
+
+using Domain.Objects;
+using Domain.Interfaces;
+
+using CardDataService.Objects;
+
+using System.Collections.Generic;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using PgDataStore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebTools;
 
 namespace CardDataService
 {
@@ -27,26 +26,34 @@ namespace CardDataService
 
         public void ConfigureServices(IServiceCollection services)
         {
-
         }
-
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var resourceConnections = _config.GetSection("ConnectionResources").Get<Dictionary<string, ResourceConnection>>();
+            var resourceConnections = _config
+                .GetSection("ConnectionResources")
+                .Get<Dictionary<string, ResourceConnection>>();
 
-            var requestHandlingOptions = new MiddlewareOptions();
-            requestHandlingOptions.Add("Prefix", "card");
-            requestHandlingOptions.Add("MainData", resourceConnections["MainData"]);
-
+            ResourceConnection mainResourceConnection = resourceConnections["MainData"];
+            mainResourceConnection.DataTool<Card>().TryInitData();
             IEvents events = resourceConnections["MessageData"].Events();
+
             events.Handle(evnt =>
             {
-                MessageHandling handling = new MessageHandling(resourceConnections["MainData"]);
-                handling.Run(evnt);
+                MessageCatching catching = new MessageCatching(mainResourceConnection);
+                catching.Run(evnt);
             });
 
-            app.UseMiddleware<RequestHandling>(requestHandlingOptions);
+            app.UseMiddleware<ErrorHandling>(new MiddlewareOptions(new Dictionary<string, object>
+            {
+                { "Logger", resourceConnections["Logger"] },
+            }));
+
+            app.UseMiddleware<RequestHandling>(new MiddlewareOptions(new Dictionary<string, object>
+            {
+                { "Prefix", "card" },
+                { "MainData", mainResourceConnection }
+            }));
         }
     }
 }

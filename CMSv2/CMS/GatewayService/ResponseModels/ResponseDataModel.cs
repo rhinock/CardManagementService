@@ -1,6 +1,5 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GatewayService.ResponseModels
 {
@@ -10,15 +9,15 @@ namespace GatewayService.ResponseModels
 
         public override string ToString()
         {
-            string result = $"{base.ToString()}\n";
+            string result = $"{base.ToString().TrimEnd('}').TrimEnd(' ')}, Data: ";
 
             if (Data is IEnumerable<object> objectEnumerable)
             {
-                result += string.Join(Environment.NewLine, objectEnumerable.Select(o => o.ToString()));
+                result = $"[{string.Join(",", objectEnumerable.Select(o => o.ToString()))}] }}";
             }
             else
             {
-                result += Data?.ToString();
+                result = $"{Data?.ToString()} }}";
             }
 
             return result;

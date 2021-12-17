@@ -8,5 +8,7 @@ namespace Domain.Objects
         public Dictionary<string, object> Arg { get; set; }
 
         public EventType EventType { get; set; }
+
+        public string SourceName { get; set; }
     }
 }
