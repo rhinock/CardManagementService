@@ -35,25 +35,44 @@ namespace GatewayService.Controllers
         [ProducesResponseType(typeof(ResponseModel), 400)]
         public async Task<ActionResult> GetOperationByCardId(Guid? cardId)
         {
-            IEnumerable<Operation> operations;
+            // IEnumerable<Operation> operations;
+
+            IEnumerable<Operation> operations = await Repository.GetMany<Operation>();
+            IEnumerable<OperationModel> operationModels;
+            Guid operationCardId;
 
             if (cardId.HasValue)
             {
-                Guid operationCardId = cardId.Value;
-                operations = await Repository
-                    .GetMany<Operation>(x => x.CardId == operationCardId);
+                // Guid operationCardId = cardId.Value;
+                // operations = await Repository.GetMany<Operation>(x => x.CardId == operationCardId);
 
-                return await InfoAsync(operations.Select(o => o.To<Operation, OperationModel>()));
+                operationCardId = cardId.Value;
+
+                operationModels = operations
+                    .Where(x => x.CardId == operationCardId)
+                    .ToList()
+                    .Select(om => om.To<Operation, OperationModel>());
+
+                // return await InfoAsync(operations.Select(o => o.To<Operation, OperationModel>()));
             }
             else
             {
-                Guid defaultCardId = ((await Repository.Get<Card>(x => x.IsDefault == true))?.Id).GetValueOrDefault();
+                // Guid defaultCardId = ((await Repository.Get<Card>(x => x.IsDefault == true))?.Id).GetValueOrDefault();
+                // operations = await Repository.GetMany<Operation>(x => x.CardId == defaultCardId);
 
-                operations = await Repository
-                    .GetMany<Operation>(x => x.CardId == defaultCardId);
+                // operationCardId = ((await Repository.Get<Card>(x => x.IsDefault == true))?.Id).GetValueOrDefault();
+                IEnumerable<Card> cards = await Repository.GetMany<Card>(x => x.IsDefault == true);
+                List<Guid> cardIds = cards.Select(x => x.Id).ToList();
 
-                return await InfoAsync(operations.Select(o => o.To<Operation, OperationDefaultModel>()));
+                operationModels = operations
+                    .Where(x => cardIds.Contains(x.CardId.Value))
+                    .ToList()
+                    .Select(om => om.To<Operation, OperationModel>());
+                
+                // return await InfoAsync(operations.Select(o => o.To<Operation, OperationDefaultModel>()));
             }
+
+            return await InfoAsync(operationModels);
         }
 
         /// <summary>
