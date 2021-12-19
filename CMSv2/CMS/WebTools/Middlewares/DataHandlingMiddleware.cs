@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 using Microsoft.AspNetCore.Http;
+using System.Text.RegularExpressions;
 
 namespace WebTools.Middlewares
 {
@@ -19,8 +20,9 @@ namespace WebTools.Middlewares
             string path = context.Request.Path.Value.ToLower();
 
             string prefix = Options.Get<string>("Prefix");
+            Regex prefixPattern = new Regex($"(^\\/{prefix}\\(.*\\)$)|(^\\/{prefix}$)");
 
-            if (path.StartsWith($"/{prefix}"))
+            if (prefixPattern.IsMatch(path))
             {
                 switch (method)
                 {

@@ -6,7 +6,7 @@ namespace GatewayService.Attributes
     {
         public override bool IsValid(object value)
         {
-            return CheckLuhn(value.ToString());
+            return CheckLuhn(value?.ToString() ?? "");
         }
 
         /// <summary>

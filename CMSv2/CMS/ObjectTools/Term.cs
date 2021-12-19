@@ -189,8 +189,18 @@ namespace ObjectTools
                         FieldInfo[] memberFields = valueMember.GetType().GetFields();
                         foreach (FieldInfo memberField in memberFields)
                         {
+                            string variableName = $"value({memberField.DeclaringType.FullName}).{memberField.Name}";
                             string value = GetVaribaleValue(memberField.GetValue(valueMember));
-                            expressionString = expressionString.Replace($"value({memberField.DeclaringType.FullName}).{memberField.Name}", value);
+                            if(expressionString.Contains($"Convert({variableName}, "))
+                            {
+                                expressionString = expressionString.Replace($"{variableName}", "variable");
+                                Regex convertPattern = new Regex("Convert\\(variable, .*\\)");
+                                expressionString = convertPattern.Replace(expressionString, value);
+                            }
+                            else
+                            {
+                                expressionString = expressionString.Replace($"{variableName}", value);
+                            }
                         }
                     }
                 }

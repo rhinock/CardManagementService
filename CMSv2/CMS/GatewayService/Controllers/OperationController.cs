@@ -35,41 +35,29 @@ namespace GatewayService.Controllers
         [ProducesResponseType(typeof(ResponseModel), 400)]
         public async Task<ActionResult> GetOperationByCardId(Guid? cardId)
         {
-            // IEnumerable<Operation> operations;
-
-            IEnumerable<Operation> operations = await Repository.GetMany<Operation>();
             IEnumerable<OperationModel> operationModels;
-            Guid operationCardId;
 
             if (cardId.HasValue)
             {
-                // Guid operationCardId = cardId.Value;
-                // operations = await Repository.GetMany<Operation>(x => x.CardId == operationCardId);
-
-                operationCardId = cardId.Value;
+                Guid operationCardId = cardId.Value;
+                IEnumerable<Operation> operations = await Repository.GetMany<Operation>(x => x.CardId == operationCardId);
 
                 operationModels = operations
-                    .Where(x => x.CardId == operationCardId)
-                    .ToList()
                     .Select(om => om.To<Operation, OperationModel>());
-
-                // return await InfoAsync(operations.Select(o => o.To<Operation, OperationModel>()));
             }
             else
             {
-                // Guid defaultCardId = ((await Repository.Get<Card>(x => x.IsDefault == true))?.Id).GetValueOrDefault();
-                // operations = await Repository.GetMany<Operation>(x => x.CardId == defaultCardId);
-
-                // operationCardId = ((await Repository.Get<Card>(x => x.IsDefault == true))?.Id).GetValueOrDefault();
+                List<Operation> operations = new List<Operation>();
                 IEnumerable<Card> cards = await Repository.GetMany<Card>(x => x.IsDefault == true);
-                List<Guid> cardIds = cards.Select(x => x.Id).ToList();
+
+                foreach(var card in cards)
+                {
+                    Guid operationCardId = card.Id;
+                    operations.AddRange(await Repository.GetMany<Operation>(x => x.CardId == operationCardId));
+                }
 
                 operationModels = operations
-                    .Where(x => cardIds.Contains(x.CardId.Value))
-                    .ToList()
                     .Select(om => om.To<Operation, OperationModel>());
-                
-                // return await InfoAsync(operations.Select(o => o.To<Operation, OperationDefaultModel>()));
             }
 
             return await InfoAsync(operationModels);
@@ -93,8 +81,8 @@ namespace GatewayService.Controllers
             if (model.CardId.HasValue)
             {
                 Guid cardId = model.CardId.Value;
-                card = await Repository.Get<Card>(c => c.Id == cardId); 
-                
+                card = await Repository.Get<Card>(c => c.Id == cardId);
+
                 if (card == null)
                 {
                     return await ErrorAsync("Card wasn't found", BusinessResult.NotFound);

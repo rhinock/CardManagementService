@@ -7,11 +7,13 @@ namespace GatewayService.Models
 {
     public class OperationCardModel : Model
     {
-        [StringLength(3)]
+        [Required]
+        [StringLength(3, MinimumLength = 3)]
         public string Cvc { get; set; }
 
+        [Required]
         [PanValidation(ErrorMessage = "Card Number is invalid")]
-        [StringLength(16)]
+        [StringLength(16, MinimumLength = 16)]
         public string Pan { get; set; }
 
         [Required]

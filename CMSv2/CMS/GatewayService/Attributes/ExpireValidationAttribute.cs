@@ -11,10 +11,10 @@ namespace GatewayService.Attributes
         {
             Expire expire = value as Expire;
 
-            if (expire.Year < DateTime.Now.Year)
+            if (expire?.Year < DateTime.Now.Year)
                 return false;
             
-            if (expire.Year == DateTime.Now.Year && expire.Month < DateTime.Now.Month)
+            if (expire?.Year == DateTime.Now.Year && expire?.Month < DateTime.Now.Month)
                 return false;
 
             return true;
