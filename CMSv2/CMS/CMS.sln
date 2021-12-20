@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31825.309
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PgDataStore", "ClassLibrary1\PgDataStore.csproj", "{2E985E0D-F236-4B6F-9EF6-0AEFEDB55A79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PgDataStore", "PgDataStore\PgDataStore.csproj", "{2E985E0D-F236-4B6F-9EF6-0AEFEDB55A79}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{C4711EE8-862F-4002-94B8-FCC7E3E1273B}"
 EndProject
