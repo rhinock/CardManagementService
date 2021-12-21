@@ -1,0 +1,12 @@
+{
+  "Routes": [
+    {
+      "ObjectName": "card",
+      "ResourceConnection": "http://card-service/card"
+    },
+    {
+      "ObjectName": "operation",
+      "ResourceConnection": "http://operation-service/operation"
+    }
+  ]
+}

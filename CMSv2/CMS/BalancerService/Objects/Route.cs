@@ -10,6 +10,7 @@ namespace BalancerService.Objects
     public class Route : IDataObject
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Number { get; set; }
 
         public string ObjectName { get; set; }

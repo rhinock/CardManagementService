@@ -23,9 +23,9 @@ namespace PgDataStore
             modelBuilder.Entity<T>();
         }
 
-        public void TryInitData()
+        public bool TryInitData()
         {
-            Database.EnsureCreated();
+            return Database.EnsureCreated();
         }
     }
 }

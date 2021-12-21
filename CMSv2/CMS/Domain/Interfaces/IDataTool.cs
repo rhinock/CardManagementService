@@ -2,6 +2,6 @@
 {
     public interface IDataTool
     {
-        void TryInitData();
+        bool TryInitData();
     }
 }

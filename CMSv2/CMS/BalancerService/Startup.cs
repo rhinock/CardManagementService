@@ -17,11 +17,15 @@ namespace BalancerService
 {
     public class Startup
     {
-        private readonly IConfiguration _config;
+        private readonly IConfiguration Configuration;
 
         public Startup(IConfiguration configuration)
         {
-            _config = configuration;
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("datasettings.json")
+                .AddConfiguration(configuration);
+
+            Configuration = builder.Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -30,13 +34,19 @@ namespace BalancerService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var resourceConnections = _config
+            var resourceConnections = Configuration
                 .GetSection("ConnectionResources")
                 .Get<Dictionary<string, ResourceConnection>>();
 
-            ResourceConnection mainResourceConnection = resourceConnections["MainData"];
+            var routes = Configuration
+                .GetSection("Routes")
+                .Get<Route[]>();
 
-            mainResourceConnection.DataTool<Route>().TryInitData();
+            ResourceConnection mainResourceConnection = resourceConnections["MainData"];
+            InitialData initialData = new InitialData(mainResourceConnection, routes);
+
+            if (mainResourceConnection.DataTool<Route>().TryInitData())
+                initialData.Init();
 
             app.UseMiddleware<ErrorHandling>(new MiddlewareOptions(new Dictionary<string, object>
             {
