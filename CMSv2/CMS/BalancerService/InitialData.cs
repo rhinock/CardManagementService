@@ -21,9 +21,7 @@ namespace BalancerService
         public void Init()
         {
             foreach (var route in _routes)
-            {
                 _repository.Create(route);
-            }
         }
     }
 }

@@ -18,10 +18,14 @@ namespace CardDataService
 {
     public class Startup
     {
-        private readonly IConfiguration _config;
+        private readonly IConfiguration Configuration;
         public Startup(IConfiguration configuration)
         {
-            _config = configuration;
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("datasettings.json")
+                .AddConfiguration(configuration);
+
+            Configuration = builder.Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -30,12 +34,20 @@ namespace CardDataService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var resourceConnections = _config
+            var resourceConnections = Configuration
                 .GetSection("ConnectionResources")
                 .Get<Dictionary<string, ResourceConnection>>();
 
+            var cards = Configuration
+                .GetSection("Cards")
+                .Get<Card[]>();
+
             ResourceConnection mainResourceConnection = resourceConnections["MainData"];
-            mainResourceConnection.DataTool<Card>().TryInitData();
+            InitialData initialData = new InitialData(mainResourceConnection, cards);
+
+            if (mainResourceConnection.DataTool<Card>().TryInitData())
+                initialData.Init();
+
             IEvents events = resourceConnections["MessageData"].Events();
 
             events.Handle(evnt =>

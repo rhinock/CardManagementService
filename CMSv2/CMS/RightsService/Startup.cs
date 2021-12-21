@@ -17,10 +17,14 @@ namespace RightsService
 {
     public class Startup
     {
-        private readonly IConfiguration _config;
+        private readonly IConfiguration Configuration;
         public Startup(IConfiguration configuration)
         {
-            _config = configuration;
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("datasettings.json")
+                .AddConfiguration(configuration);
+
+            Configuration = builder.Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -29,15 +33,25 @@ namespace RightsService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var resourceConnections = _config.GetSection("ConnectionResources").Get<Dictionary<string, ResourceConnection>>();
-            ResourceConnection mainResourceConnection = resourceConnections["MainData"];
+            var resourceConnections = Configuration
+                .GetSection("ConnectionResources")
+                .Get<Dictionary<string, ResourceConnection>>();
 
-            mainResourceConnection.DataTool<User>().TryInitData();
+            var users = Configuration
+                .GetSection("Users")
+                .Get<User[]>();
+
+            ResourceConnection mainResourceConnection = resourceConnections["MainData"];
+            InitialData initialData = new InitialData(mainResourceConnection, users);
+
+            if (mainResourceConnection.DataTool<User>().TryInitData())
+                initialData.Init();
 
             app.UseMiddleware<ErrorHandling>(new MiddlewareOptions(new Dictionary<string, object>
             {
                 { "Logger", resourceConnections["Logger"] },
             }));
+
             app.UseMiddleware<RequestHandling>(new MiddlewareOptions(new Dictionary<string, object>
             {
                 { "Prefix", "operation" },

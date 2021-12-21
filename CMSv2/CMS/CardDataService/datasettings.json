@@ -1,0 +1,28 @@
+{
+  "Cards": [
+    {
+      "Cvc": "001",
+      "Pan": "4360251111335365",
+      "Name": "card01",
+      "IsDefault": true,
+      "UserId": "65ebe5d1-a883-46e2-805a-4c2d44eab438",
+      "ExpirationDate": "12/2099"
+    },
+    {
+      "Cvc": "002",
+      "Pan": "4024007173305771",
+      "Name": "card02",
+      "IsDefault": false,
+      "UserId": "65ebe5d1-a883-46e2-805a-4c2d44eab438",
+      "ExpirationDate": "06/2026"
+    },
+    {
+      "Cvc": "003",
+      "Pan": "2720473437781424",
+      "Name": "card03",
+      "IsDefault": true,
+      "UserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "ExpirationDate": "05/2025"
+    }
+  ]
+}

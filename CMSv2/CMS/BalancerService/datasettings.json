@@ -2,11 +2,11 @@
   "Routes": [
     {
       "ObjectName": "card",
-      "ResourceConnection": "http://card-service/card"
+      "ResourceConnection": "http://localhost/cardDataService/card"
     },
     {
       "ObjectName": "operation",
-      "ResourceConnection": "http://operation-service/operation"
+      "ResourceConnection": "http://localhost/operationDataservice/operation"
     }
   ]
 }
