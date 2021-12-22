@@ -1,17 +1,17 @@
 {
   "Operations": [
     {
-      "CardId": "35bbf13d-eed2-4016-8a55-6189c3781594",
+      "CardId": "d29f2fb4-409c-40b0-ad1e-4baa1758ea8e",
       "Name": "Petrol",
       "Amount": 1200
     },
     {
-      "CardId": "35bbf13d-eed2-4016-8a55-6189c3781594",
+      "CardId": "57d92bd8-413e-4377-8de2-f69d57ece143",
       "Name": "Products",
       "Amount": 2500
     },
     {
-      "CardId": "88a6a3b9-7407-4e32-b241-85f5c37b5c3f",
+      "CardId": "e0c6d6a1-5386-4690-9d63-23964e4be74f",
       "Name": "Phone",
       "Amount": 37000
     }

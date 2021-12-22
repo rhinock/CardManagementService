@@ -56,7 +56,7 @@ namespace OperationDataService
                         .Add("gt", Term.GreaterThanValue)
                         .Add("lt", Term.LessThanValue)
                         .Add("ge", Term.GreaterThanOrEqualValue)
-                        .Add("le", Term.LessThanValue)
+                        .Add("le", Term.LessThanOrEqualValue)
                         .Add("'", Term.QuoteValue);
                     operations = await Repository.GetMany(term.ToBoolExpression<Operation>());
                 }

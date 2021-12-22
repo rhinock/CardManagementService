@@ -56,7 +56,7 @@ namespace CardDataService
                         .Add("gt", Term.GreaterThanValue)
                         .Add("lt", Term.LessThanValue)
                         .Add("ge", Term.GreaterThanOrEqualValue)
-                        .Add("le", Term.LessThanValue)
+                        .Add("le", Term.LessThanOrEqualValue)
                         .Add("'", Term.QuoteValue);
 
                     cards = await Repository.GetMany(term.ToBoolExpression<Card>());
@@ -75,19 +75,28 @@ namespace CardDataService
             Guid id = GetItemId(context);
 
             Card card = await Repository.Get<Card>(x => x.Id == id);
-            Card newData = JsonConvert.DeserializeObject<Card>(await context.Request.GetBodyAsStringAsync());
 
-            card.Set(newData);
-            card.Id = id;
-            await Repository.Update(card);
+            if (card != null)
+            {
+                Card newData = JsonConvert.DeserializeObject<Card>(await context.Request.GetBodyAsStringAsync());
 
-            context.Response.Headers.Add("ObjectId", card.Id.ToString());
-            context.Response.StatusCode = 204;
+                card.Set(newData);
+                card.Id = id;
+                await Repository.Update(card);
+
+                context.Response.Headers.Add("ObjectId", card.Id.ToString());
+                context.Response.StatusCode = 204;
+            }
+            else
+            {
+                context.Response.StatusCode = 404;
+            }
         }
 
         protected override async Task OnPost(HttpContext context)
         {
             Card newData = JsonConvert.DeserializeObject<Card>(await context.Request.GetBodyAsStringAsync());
+
             await Repository.Create(newData);
 
             context.Response.Headers.Add("ObjectId", newData.Id.ToString());
@@ -99,10 +108,18 @@ namespace CardDataService
             Guid id = GetItemId(context);
 
             Card card = await Repository.Get<Card>(x => x.Id == id);
-            await Repository.Delete(card);
 
-            context.Response.Headers.Add("ObjectId", card.Id.ToString());
-            context.Response.StatusCode = 204;
+            if (card != null)
+            {
+                await Repository.Delete(card);
+
+                context.Response.Headers.Add("ObjectId", card.Id.ToString());
+                context.Response.StatusCode = 204;
+            }
+            else
+            {
+                context.Response.StatusCode = 404;
+            }
         }
 
         private Guid GetItemId(HttpContext context)
