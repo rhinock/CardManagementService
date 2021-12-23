@@ -11,7 +11,7 @@ services:
       ConnectionResources__Auth__Value: "http://rights-service"
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
     ports:
-      - "8080:80"
+      - "${GATEWAY_SERVICE_PORT}:80"
     depends_on:
       - balancer-service
       - logger-service
@@ -25,6 +25,8 @@ services:
     environment:
       ConnectionResources__MainData__Value: "Host=balancer-db;Port=5432;Database=${BALANCER_DB_NAME};Username=${BALANCER_DB_USER};Password=${BALANCER_DB_PASSWORD}"
       ConnectionResources__Logger__Value: "http://logger-service; minlevel=${LOG_LEVEL}; origin=balancer"
+      Routes__0__ResourceConnection: "http://card-service/card"
+      Routes__1__ResourceConnection: "http://operation-service/operation"
     depends_on:
       - logger-service
       - balancer-db
@@ -37,7 +39,7 @@ services:
       POSTGRES_PASSWORD: "${BALANCER_DB_PASSWORD}"
     restart: unless-stopped
     ports:
-      - "5437:5432"
+      - "${BALANCER_DB_PORT}:5432"
     volumes:
       - "balancer-db:/var/lib/postgresql/data"
   card-service:
@@ -62,7 +64,7 @@ services:
       POSTGRES_PASSWORD: "${CARD_DB_PASSWORD}"
     restart: unless-stopped
     ports:
-      - "5434:5432"
+      - "${CARD_DB_PORT}:5432"
     volumes:
       - "card-db:/var/lib/postgresql/data"
   operation-service:
@@ -87,7 +89,7 @@ services:
       POSTGRES_PASSWORD: ${OPERATION_DB_PASSWORD}
     restart: unless-stopped
     ports:
-      - "5435:5432"
+      - "${OPERATION_DB_PORT}:5432"
     volumes:
       - "operation-db:/var/lib/postgresql/data"
   rights-service:
@@ -110,7 +112,7 @@ services:
       POSTGRES_PASSWORD: ${RIGHTS_DB_PASSWORD}
     restart: unless-stopped
     ports:
-      - "5436:5432"
+      - "${RIGHTS_DB_PORT}:5432"
     volumes:
       - "rights-db:/var/lib/postgresql/data"
   logger-service:
