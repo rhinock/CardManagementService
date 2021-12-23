@@ -33,7 +33,7 @@ namespace BalancerService
 
             if(route == null)
             {
-                context.Response.StatusCode = 404;
+                context.Response.StatusCode = 500;
             }
             else
             {
