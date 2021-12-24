@@ -60,7 +60,9 @@ namespace DataServices
                         }));
                 }
             }
-            catch { }
+            catch
+            {
+            }
         }
 
         private bool AllowSend(string level)

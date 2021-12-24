@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Domain.Objects;
 using Domain.Interfaces;
@@ -14,37 +15,86 @@ namespace FileDataStore
         private readonly LoggerOptions _options;
         private static ReaderWriterLock fileLock = new ReaderWriterLock();
 
+        private static List<Log> _logs;
+
         public FileLogger(ResourceConnection connection)
         {
             _options = new LoggerOptions();
             _connection = connection;
+
+            StartWriting();
         }
 
         public int Timeout => Options.Has("Timeout") == true ? Options.Get<int>("Timeout") : int.MaxValue;
         public LoggerOptions Options => _options;
 
+
         public async Task Info(string message)
         {
-            fileLock.AcquireWriterLock(Timeout);
-            await File.AppendAllTextAsync(GetFilePath(), $"{DateTime.Now:HH:mm:ss.ms} [INFO]: {message}{Environment.NewLine}");
-            fileLock.ReleaseWriterLock();
+            await AddLog("info", message);
         }
 
         public async Task Error(string message)
         {
+            await AddLog("error", message);
+        }
+
+
+        private async Task AddLog(string type, string message)
+        {
+            lock (_logs)
+            {
+                _logs.Add(new Log
+                {
+                    Type = type,
+                    Message = message,
+                });
+            }
+            await Task.Delay(0);
+        }
+
+        private void StartWriting()
+        {
+            _logs = new List<Log>();
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    try
+                    {
+                        lock (_logs)
+                        {
+                            _logs.ForEach(x => WriteLog(x));
+                            _logs.Clear();
+                        }
+                    }
+                    catch { }
+                }
+            }).Start();
+        }
+
+        private void WriteLog(Log log)
+        {
             fileLock.AcquireWriterLock(Timeout);
-            await File.AppendAllTextAsync(GetFilePath(), $"{DateTime.Now:HH:mm:ss.ms} [ERROR]: {message}{Environment.NewLine}");
+            File.AppendAllText(GetFilePath(), $"{DateTime.Now:HH:mm:ss.ms} [{log.Type.ToUpper()}]: {log.Message}{Environment.NewLine}");
             fileLock.ReleaseWriterLock();
         }
 
         private string GetFilePath()
         {
             string path = $"{_connection.Value}/{DateTime.Now:dd.MM.yyyy}.txt";
-            if(!Directory.Exists(path))
+            if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(_connection.Value);
             }
             return path;
+        }
+
+        private class Log
+        {
+            public string Type { get; set; }
+
+            public string Message { get; set; }
         }
     }
 }
