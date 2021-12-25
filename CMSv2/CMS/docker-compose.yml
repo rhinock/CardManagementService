@@ -6,7 +6,7 @@ services:
       args:
         SERVICE_NAME: GatewayService
     environment:
-      ConnectionResources__MainData__Value: "http://balancer-service"
+      ConnectionResources__MainData__Value: "http://balancer-service; retryCount=6; retryStart=2; exceptionCount=5; breakDuration=60"
       ConnectionResources__Logger__Value: "http://logger-service; minlevel=${LOG_LEVEL}; origin=gateway"
       ConnectionResources__Auth__Value: "http://rights-service"
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
