@@ -3,10 +3,10 @@ using Domain.Interfaces;
 
 using Infrastructure;
 
-using BalancerService.Objects;
+//using BalancerService.Objects;
 
 namespace BalancerService
-{
+{/*
     public class InitialData
     {
         private readonly IRepository _repository;
@@ -23,5 +23,5 @@ namespace BalancerService
             foreach (var route in _routes)
                 _repository.Create(route);
         }
-    }
+    }*/
 }

@@ -1,7 +1,8 @@
 ﻿using WebTools;
 using WebTools.Middlewares;
 
-using BalancerService.Objects;
+/*using BalancerService.Objects;*/
+using Data.Balancer.Objects;
 
 using System.Threading.Tasks;
 
