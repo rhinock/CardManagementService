@@ -1,0 +1,1588 @@
+{
+	"info": {
+		"_postman_id": "5c8c8902-dc53-4ef0-a1c0-745f66f55f27",
+		"name": "CMSv2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Services",
+			"item": [
+				{
+					"name": "LoggerService OK",
+					"item": [
+						{
+							"name": "POST",
+							"item": [
+								{
+									"name": "404",
+									"item": [
+										{
+											"name": "/",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"message\": \"error\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{LoggerService}}",
+													"host": [
+														"{{LoggerService}}"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "200",
+									"item": [
+										{
+											"name": "/info",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"message\": \"info\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{LoggerService}}/info",
+													"host": [
+														"{{LoggerService}}"
+													],
+													"path": [
+														"info"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "/error",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"message\": \"error\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{LoggerService}}/error",
+													"host": [
+														"{{LoggerService}}"
+													],
+													"path": [
+														"error"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "400",
+									"item": [
+										{
+											"name": "/",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{LoggerService}}",
+													"host": [
+														"{{LoggerService}}"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "CardService OK",
+					"item": [
+						{
+							"name": "GET",
+							"item": [
+								{
+									"name": "200",
+									"item": [
+										{
+											"name": "/",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{CardService}}",
+													"host": [
+														"{{CardService}}"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=Id eq",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{CardService}}?$filter=Id eq d29f2fb4-409c-40b0-ad1e-4baa1758ea8e",
+													"host": [
+														"{{CardService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Id eq d29f2fb4-409c-40b0-ad1e-4baa1758ea8e",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=Id ne",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{CardService}}?$filter=Id ne d29f2fb4-409c-40b0-ad1e-4baa1758ea8e",
+													"host": [
+														"{{CardService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Id ne d29f2fb4-409c-40b0-ad1e-4baa1758ea8e",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=Id eq and IsDefault eq",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{CardService}}?$filter=Id eq d29f2fb4-409c-40b0-ad1e-4baa1758ea8e and IsDefault eq true",
+													"host": [
+														"{{CardService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Id eq d29f2fb4-409c-40b0-ad1e-4baa1758ea8e and IsDefault eq true",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=Id eq or IsDefault eq",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{CardService}}?$filter=Id eq d29f2fb4-409c-40b0-ad1e-4baa1758ea8e or IsDefault eq false",
+													"host": [
+														"{{CardService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Id eq d29f2fb4-409c-40b0-ad1e-4baa1758ea8e or IsDefault eq false",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "500",
+									"item": [
+										{
+											"name": "?$filter==ExpirationDate gt",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{CardService}}?$filter=ExpirationDate gt 12/21",
+													"host": [
+														"{{CardService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "ExpirationDate gt 12/21",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter==ExpirationDate ge",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{CardService}}?$filter=ExpirationDate ge 12/21",
+													"host": [
+														"{{CardService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "ExpirationDate ge 12/21",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter==ExpirationDate lt",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{CardService}}?$filter=ExpirationDate lt 12/21",
+													"host": [
+														"{{CardService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "ExpirationDate lt 12/21",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter==ExpirationDate le",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{CardService}}?$filter=ExpirationDate le 12/21",
+													"host": [
+														"{{CardService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "ExpirationDate le 12/21",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "404",
+									"item": [
+										{
+											"name": "/",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{CardService}}/",
+													"host": [
+														"{{CardService}}"
+													],
+													"path": [
+														""
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "POST",
+							"item": [
+								{
+									"name": "201",
+									"item": [
+										{
+											"name": "/ (no validation)",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{CardService}}",
+													"host": [
+														"{{CardService}}"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "PATCH",
+							"item": [
+								{
+									"name": "204||404",
+									"item": [
+										{
+											"name": "/ (no validation for empty body)",
+											"request": {
+												"method": "PATCH",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{CardService}}(d29f2fb4-409c-40b0-ad1e-4baa1758ea8e)",
+													"host": [
+														"{{CardService}}(d29f2fb4-409c-40b0-ad1e-4baa1758ea8e)"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "DELETE",
+							"item": [
+								{
+									"name": "201||404",
+									"item": [
+										{
+											"name": "/ (no validation for non-existent card)",
+											"request": {
+												"method": "DELETE",
+												"header": [],
+												"url": {
+													"raw": "{{CardService}}(42bc4bf8-6504-42d3-afe0-ddfbbc48cc06)",
+													"host": [
+														"{{CardService}}(42bc4bf8-6504-42d3-afe0-ddfbbc48cc06)"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "PUT",
+							"item": [
+								{
+									"name": "405",
+									"item": [
+										{
+											"name": "(id)",
+											"request": {
+												"method": "PUT",
+												"header": [],
+												"url": {
+													"raw": "{{CardService}}(e23196a0-dcb6-4bed-b234-de7f19d140af)",
+													"host": [
+														"{{CardService}}(e23196a0-dcb6-4bed-b234-de7f19d140af)"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "BalancerService OK",
+					"item": [
+						{
+							"name": "ANY",
+							"item": [
+								{
+									"name": "404",
+									"item": [
+										{
+											"name": "/",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{BalancerService}}",
+													"host": [
+														"{{BalancerService}}"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "200",
+									"item": [
+										{
+											"name": "/card",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{BalancerService}}/card",
+													"host": [
+														"{{BalancerService}}"
+													],
+													"path": [
+														"card"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "/operation",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{BalancerService}}/operation",
+													"host": [
+														"{{BalancerService}}"
+													],
+													"path": [
+														"operation"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "OperationService OK",
+					"item": [
+						{
+							"name": "GET",
+							"item": [
+								{
+									"name": "200",
+									"item": [
+										{
+											"name": "$filter=Id eq",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{OperationService}}?$filter=Id eq d29f2fb4-409c-40b0-ad1e-4baa1758ea8e",
+													"host": [
+														"{{OperationService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Id eq d29f2fb4-409c-40b0-ad1e-4baa1758ea8e",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=Id ne",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{OperationService}}?$filter=Id ne b48f3446-4eab-42c8-955e-642d1fa7da2d",
+													"host": [
+														"{{OperationService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Id ne b48f3446-4eab-42c8-955e-642d1fa7da2d",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=CardId eq",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{OperationService}}?$filter=CardId eq d29f2fb4-409c-40b0-ad1e-4baa1758ea8e",
+													"host": [
+														"{{OperationService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "CardId eq d29f2fb4-409c-40b0-ad1e-4baa1758ea8e"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=CardId ne",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{OperationService}}?$filter=CardId ne d29f2fb4-409c-40b0-ad1e-4baa1758ea8e",
+													"host": [
+														"{{OperationService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "CardId ne d29f2fb4-409c-40b0-ad1e-4baa1758ea8e",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=Name eq and Amount ge",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{OperationService}}?$filter=Name eq Phone and Amount ge 2500",
+													"host": [
+														"{{OperationService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Name eq Phone and Amount ge 2500"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=Name eq or Amount ge",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{OperationService}}?$filter=Name eq Phone or Amount ge 2500",
+													"host": [
+														"{{OperationService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Name eq Phone or Amount ge 2500",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=Name eq and Amount gt",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{OperationService}}?$filter=Name eq Phone and Amount gt 2500",
+													"host": [
+														"{{OperationService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Name eq Phone and Amount gt 2500",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=Name eq or Amount gt",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{OperationService}}?$filter=Name eq Phone or Amount gt 2500",
+													"host": [
+														"{{OperationService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Name eq Phone or Amount gt 2500"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=Name eq and Amount lt",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{OperationService}}?$filter=Name eq Petrol and Amount lt 2500",
+													"host": [
+														"{{OperationService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Name eq Petrol and Amount lt 2500",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=Name eq or Amount lt",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{OperationService}}?$filter=Name eq Products or Amount lt 2500",
+													"host": [
+														"{{OperationService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Name eq Products or Amount lt 2500",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=Name eq and Amount le",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{OperationService}}?$filter=Name eq Products and Amount le 2500",
+													"host": [
+														"{{OperationService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Name eq Products and Amount le 2500",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "?$filter=Name eq or Amount le",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{OperationService}}?$filter=Name eq Phone or Amount le 2500",
+													"host": [
+														"{{OperationService}}"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "Name eq Phone or Amount le 2500",
+															"description": "Note: parameter is case sensitive"
+														}
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "404",
+									"item": [
+										{
+											"name": "/",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{OperationService}}/",
+													"host": [
+														"{{OperationService}}"
+													],
+													"path": [
+														""
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "RightsService OK",
+					"item": [
+						{
+							"name": "Any",
+							"item": [
+								{
+									"name": "404",
+									"item": [
+										{
+											"name": "/",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{RightsService}}",
+													"host": [
+														"{{RightsService}}"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "400",
+									"item": [
+										{
+											"name": "/cred",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{RightsService}}/cred?value=1",
+													"host": [
+														"{{RightsService}}"
+													],
+													"path": [
+														"cred"
+													],
+													"query": [
+														{
+															"key": "value",
+															"value": "1"
+														}
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "200",
+									"item": [
+										{
+											"name": "/cred",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{RightsService}}/cred?value=qwerty",
+													"host": [
+														"{{RightsService}}"
+													],
+													"path": [
+														"cred"
+													],
+													"query": [
+														{
+															"key": "value",
+															"value": "qwerty"
+														}
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Any (except POST)",
+							"item": [
+								{
+									"name": "405",
+									"item": [
+										{
+											"name": "/login",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{RightsService}}/login",
+													"host": [
+														"{{RightsService}}"
+													],
+													"path": [
+														"login"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "POST",
+							"item": [
+								{
+									"name": "401",
+									"item": [
+										{
+											"name": "/login",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"url": {
+													"raw": "{{RightsService}}/login",
+													"host": [
+														"{{RightsService}}"
+													],
+													"path": [
+														"login"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "200",
+									"item": [
+										{
+											"name": "/login",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"Name\": \"Admin\",\r\n    \"Password\": \"1234\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{RightsService}}/login",
+													"host": [
+														"{{RightsService}}"
+													],
+													"path": [
+														"login"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "GatewayService OK",
+					"item": [
+						{
+							"name": "Any",
+							"item": [
+								{
+									"name": "401",
+									"item": [
+										{
+											"name": "/",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{GatewayService}}",
+													"host": [
+														"{{GatewayService}}"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "404",
+									"item": [
+										{
+											"name": "/",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{GatewayService}}",
+													"host": [
+														"{{GatewayService}}"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "api/card",
+							"item": [
+								{
+									"name": "GET",
+									"item": [
+										{
+											"name": "200",
+											"item": [
+												{
+													"name": "/api/card",
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{GatewayService}}/api/card",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"card"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "/api/card/{id}",
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{GatewayService}}/api/card/57d92bd8-413e-4377-8de2-f69d57ece143",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"card",
+																"57d92bd8-413e-4377-8de2-f69d57ece143"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "/api/card/user/{id}",
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{GatewayService}}/api/card/user/65ebe5d1-a883-46e2-805a-4c2d44eab438",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"card",
+																"user",
+																"65ebe5d1-a883-46e2-805a-4c2d44eab438"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "POST",
+									"item": [
+										{
+											"name": "400",
+											"item": [
+												{
+													"name": "/api/card",
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{GatewayService}}/api/card",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"card"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "/api/card",
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"cvc\": \"01\",\r\n    \"pan\": \"378726502553955\",\r\n    \"expire\": {\r\n        \"month\": -1,\r\n        \"year\": 2020\r\n    },\r\n    \"name\": \"\",\r\n    \"isDefault\": false,\r\n    \"userId\": \"723b5a76-9ac8-4884-8a49-83a47bbc510\"\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{GatewayService}}/api/card",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"card"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "200",
+											"item": [
+												{
+													"name": "/api/card",
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"cvc\": \"011\",\r\n    \"pan\": \"3787265025539554\",\r\n    \"expire\": {\r\n        \"month\": 11,\r\n        \"year\": 2026\r\n    },\r\n    \"name\": \"n01\",\r\n    \"isDefault\": false,\r\n    \"userId\": \"723b5a76-9ac8-4884-8a49-83a47bbc5101\"\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{GatewayService}}/api/card",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"card"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "PUT",
+									"item": [
+										{
+											"name": "200 || 404",
+											"item": [
+												{
+													"name": "/api/card/{id}",
+													"request": {
+														"method": "PUT",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"name\": \"card11\"\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{GatewayService}}/api/card/57d92bd8-413e-4377-8de2-f69d57ece143",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"card",
+																"57d92bd8-413e-4377-8de2-f69d57ece143"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "400",
+											"item": [
+												{
+													"name": "/api/card/{id}",
+													"request": {
+														"method": "PUT",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{GatewayService}}/api/card/d29f2fb4-409c-40b0-ad1e-4baa1758ea8e",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"card",
+																"d29f2fb4-409c-40b0-ad1e-4baa1758ea8e"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "/api/card/{id}",
+													"request": {
+														"method": "PUT",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"name\": \"\"\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{GatewayService}}/api/card/d29f2fb4-409c-40b0-ad1e-4baa1758ea8e",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"card",
+																"d29f2fb4-409c-40b0-ad1e-4baa1758ea8e"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "DELETE",
+									"item": [
+										{
+											"name": "200 || 400",
+											"item": [
+												{
+													"name": "/api/card/{id}",
+													"request": {
+														"method": "DELETE",
+														"header": [],
+														"url": {
+															"raw": "{{GatewayService}}/api/card/c7661e14-9afa-46ef-a4bc-557b27c34b12",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"card",
+																"c7661e14-9afa-46ef-a4bc-557b27c34b12"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "api/operation",
+							"item": [
+								{
+									"name": "GET",
+									"item": [
+										{
+											"name": "200",
+											"item": [
+												{
+													"name": "/api/operation",
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{GatewayService}}/api/operation",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"operation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "/api/operation/{id}",
+													"request": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{GatewayService}}/api/operation?CardId=d29f2fb4-409c-40b0-ad1e-4baa1758ea8e",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"operation"
+															],
+															"query": [
+																{
+																	"key": "CardId",
+																	"value": "d29f2fb4-409c-40b0-ad1e-4baa1758ea8e"
+																}
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "POST",
+									"item": [
+										{
+											"name": "400",
+											"item": [
+												{
+													"name": "/api/operation",
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{GatewayService}}/api/operation",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"operation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "/api/operation (operation)",
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"cardId\": \"ff1b4a0e-5e30-4319-8291-b39d0bd4e04\",\r\n    \"name\": \"\",\r\n    \"amount\": \"\"\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{GatewayService}}/api/operation",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"operation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "/api/operation (operation + card)",
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"name\": \"\",\r\n    \"amount\": \"\",\r\n    \"card\": {\r\n        \"pan\": \"492972279896484\",\r\n        \"expire\": {\r\n            \"Month\": -1,\r\n            \"Year\": 2020\r\n        },\r\n        \"cvc\": \"13\"\r\n    }\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{GatewayService}}/api/operation",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"operation"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "200",
+											"item": [
+												{
+													"name": "/api/operation (operation)",
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"cardId\": \"d29f2fb4-409c-40b0-ad1e-4baa1758ea8e\",\r\n    \"name\": \"operation02\",\r\n    \"amount\": 2\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{GatewayService}}/api/operation",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"operation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "/api/operation (operation + card)",
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"name\": \"operation01\",\r\n    \"amount\": 1,\r\n    \"card\": {\r\n        \"pan\": \"4929722798964846\",\r\n        \"expire\": {\r\n            \"Month\": 1,\r\n            \"Year\": 2022\r\n        },\r\n        \"cvc\": \"132\"\r\n    }\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{GatewayService}}/api/operation",
+															"host": [
+																"{{GatewayService}}"
+															],
+															"path": [
+																"api",
+																"operation"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "qwerty",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
