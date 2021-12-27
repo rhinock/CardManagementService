@@ -38,12 +38,14 @@ namespace LoggerService
                     context.Response.StatusCode = 400;
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(new { status = "Error", message = "Require \"Message\"" }));
+                    return;
                 }
                 else if (method != "POST")
                 {
                     context.Response.StatusCode = 405;
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(new { status = "Error" }));
+                    return;
                 }
                 else
                 {

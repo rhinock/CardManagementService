@@ -1,7 +1,7 @@
 ﻿using Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace RightsService.Objects
+namespace Data.RightsService.Objects
 {
     public class User : IDataObject
     {

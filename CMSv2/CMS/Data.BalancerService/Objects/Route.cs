@@ -1,10 +1,11 @@
-﻿
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+
 using Domain.Interfaces;
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Data.Balancer.Objects
+namespace Data.BalancerService.Objects
 {
     public class Route : IDataObject
     {
@@ -15,8 +16,6 @@ namespace Data.Balancer.Objects
         public string ObjectName { get; set; }
 
         public string ResourceConnection { get; set; }
-
-        public string Test { get; set; }
 
         [NotMapped]
         [JsonIgnore]

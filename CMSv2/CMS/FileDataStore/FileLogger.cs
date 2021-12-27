@@ -16,13 +16,12 @@ namespace FileDataStore
         private static ReaderWriterLock fileLock = new ReaderWriterLock();
 
         private static List<Log> _logs;
+        private static bool _writingStarted;
 
         public FileLogger(ResourceConnection connection)
         {
             _options = new LoggerOptions();
             _connection = connection;
-
-            StartWriting();
         }
 
         public int Timeout => Options.Has("Timeout") == true ? Options.Get<int>("Timeout") : int.MaxValue;
@@ -42,6 +41,10 @@ namespace FileDataStore
 
         private async Task AddLog(string type, string message)
         {
+            if (!_writingStarted)
+            {
+                StartWriting();
+            }
             lock (_logs)
             {
                 _logs.Add(new Log
@@ -56,6 +59,7 @@ namespace FileDataStore
         private void StartWriting()
         {
             _logs = new List<Log>();
+            _writingStarted = true;
             new Thread(() =>
             {
                 while (true)
@@ -69,6 +73,7 @@ namespace FileDataStore
                         }
                     }
                     catch { }
+                    Thread.Sleep(200);
                 }
             }).Start();
         }

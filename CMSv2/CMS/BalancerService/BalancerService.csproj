@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Data.BalancerService\Data.BalancerService.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-    <ProjectReference Include="..\Migration.Balancer\Data.Balancer.csproj" />
     <ProjectReference Include="..\WebTools\WebTools.csproj" />
   </ItemGroup>
 

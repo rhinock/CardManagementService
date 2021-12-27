@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Interfaces;
 using Newtonsoft.Json;
 
-namespace OperationDataService.Objects
+namespace Data.OperationDataService.Objects
 {
     public class Operation : IDataObject
     {

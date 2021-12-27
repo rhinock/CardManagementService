@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PgDataStore
 {
-    public class DataContext<T> : DbContext, IDataTool where T : class, IDataObject
+    public class DataContext<T> : DbContext where T : class, IDataObject
     {
         private readonly string _connectionString;
 

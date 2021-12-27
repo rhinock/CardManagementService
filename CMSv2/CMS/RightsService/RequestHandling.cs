@@ -8,7 +8,7 @@ using Infrastructure;
 
 using Newtonsoft.Json;
 
-using RightsService.Objects;
+using Data.RightsService.Objects;
 
 using System.Threading.Tasks;
 

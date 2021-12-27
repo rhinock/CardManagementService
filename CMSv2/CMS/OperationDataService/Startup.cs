@@ -3,10 +3,12 @@ using WebTools;
 using Infrastructure;
 
 using Domain.Objects;
-
-using OperationDataService.Objects;
+using Domain.Interfaces;
 
 using System.Collections.Generic;
+
+using Data.OperationDataService;
+using Data.OperationDataService.Objects;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,10 +44,10 @@ namespace OperationDataService
                 .Get<Operation[]>();
 
             ResourceConnection mainResourceConnection = resourceConnections["MainData"];
-            InitialData initialData = new InitialData(mainResourceConnection, operations);
 
-            if (mainResourceConnection.DataTool<Operation>().TryInitData())
-                initialData.Init();
+            IDataSchema dataSchema = DataSchemaManager.GetDataSchema<MigrationContext>(mainResourceConnection);
+            dataSchema.Actualize(operations);
+            dataSchema.Dispose();
 
             app.UseMiddleware<ErrorHandling>(new MiddlewareOptions(new Dictionary<string, object>
             {

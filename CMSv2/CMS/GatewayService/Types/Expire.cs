@@ -25,6 +25,11 @@ namespace GatewayService.Types
 
         public static implicit operator Expire(string value)
         {
+            if(value == null)
+            {
+                return null;
+            }
+
             int[] parts = value.Split('/').Select(x => int.Parse(x)).ToArray();
 
             if (parts.Length != 2)

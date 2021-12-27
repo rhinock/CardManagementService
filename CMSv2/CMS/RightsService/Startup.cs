@@ -3,8 +3,10 @@ using WebTools;
 using Infrastructure;
 
 using Domain.Objects;
+using Domain.Interfaces;
 
-using RightsService.Objects;
+using Data.RightsService;
+using Data.RightsService.Objects;
 
 using System.Collections.Generic;
 
@@ -42,10 +44,10 @@ namespace RightsService
                 .Get<User[]>();
 
             ResourceConnection mainResourceConnection = resourceConnections["MainData"];
-            InitialData initialData = new InitialData(mainResourceConnection, users);
 
-            if (mainResourceConnection.DataTool<User>().TryInitData())
-                initialData.Init();
+            IDataSchema dataSchema = DataSchemaManager.GetDataSchema<MigrationContext>(mainResourceConnection);
+            dataSchema.Actualize(users);
+            dataSchema.Dispose();
 
             app.UseMiddleware<ErrorHandling>(new MiddlewareOptions(new Dictionary<string, object>
             {

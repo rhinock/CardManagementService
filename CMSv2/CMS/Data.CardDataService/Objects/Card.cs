@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 using Domain.Interfaces;
 
-namespace CardDataService.Objects
+namespace Data.CardDataService.Objects
 {
     public class Card : IDataObject
     {

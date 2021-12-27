@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace Data.Balancer.Migrations
+namespace Data.BalancerService.Migrations
 {
     public partial class InitialCreate : Migration
     {

@@ -5,7 +5,8 @@ using Infrastructure;
 using Domain.Objects;
 using Domain.Interfaces;
 
-using CardDataService.Objects;
+using Data.CardDataService;
+using Data.CardDataService.Objects;
 
 using System.Collections.Generic;
 
@@ -43,10 +44,10 @@ namespace CardDataService
                 .Get<Card[]>();
 
             ResourceConnection mainResourceConnection = resourceConnections["MainData"];
-            InitialData initialData = new InitialData(mainResourceConnection, cards);
 
-            if (mainResourceConnection.DataTool<Card>().TryInitData())
-                initialData.Init();
+            IDataSchema dataSchema = DataSchemaManager.GetDataSchema<MigrationContext>(mainResourceConnection);
+            dataSchema.Actualize(cards);
+            dataSchema.Dispose();
 
             IEvents events = resourceConnections["MessageData"].Events();
 

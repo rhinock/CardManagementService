@@ -4,7 +4,7 @@ using Domain.Objects;
 
 using Infrastructure;
 
-using CardDataService.Objects;
+using Data.CardDataService.Objects;
 
 namespace CardDataService
 {
