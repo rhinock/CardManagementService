@@ -146,7 +146,7 @@ dotnet run --no-launch-profile
 |    1   |    card    |      `{card-service}`/card      |
 |    2   |  operation | `{operation-service}`/operation |
 
-|    #   |          `card-service`          |          `operation-service`          |
+|    #   |         `{card-service}`         |         `{operation-service}`         |
 |:------:|:--------------------------------:|:-------------------------------------:|
 |  debug |      https://localhost:44333     |        https://localhost:44395        |
 |   IIS  | http://localhost/cardDataService | http://localhost/operationDataService |
