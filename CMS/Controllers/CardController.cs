@@ -1,34 +1,134 @@
-﻿using CMS.Entities;
-using CMS.Filters;
+﻿using CMS.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using CMS.Enums;
+using CMS.Attributes;
+using CMS.ResponseModels;
+using CMS.Extensions;
+using CMS.Entities;
 
 namespace CMS.Controllers
 {
-    public class CardController : Controller
+    /// <summary>
+    /// Api controller for cards
+    /// </summary>
+    [Route("api/card")]
+    public class CardController : BaseController
     {
-        [ModelValidation]
-        [HttpPost]
-        public IActionResult CreateCard([FromBody] Card card)
+        /// <summary>
+        /// Get a card by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id:guid}")]
+        [Logging]
+        [ProducesResponseType(typeof(ResponseModel), 200)]
+        [ProducesResponseType(typeof(ResponseModel), 400)]
+        public IActionResult GetCardById(Guid id)
         {
-            if (!CardCollection.Cards.Any(c => c.Pan == card.Pan))
-                CardCollection.Cards.Add(card);
-            else
-                return BadRequest();
+            Card card = CardCollection.Cards.FirstOrDefault(c => c.Id == id);
 
-            return Ok(card);
+            if (card == null)
+                return Error("Card not found", BusinessResult.NotFound);
+
+            return Info(card.To<Card, CardModel>());
         }
 
-        [HttpGet]
-        public IActionResult GetCard(Guid userId)
+        /// <summary>
+        /// Get User cards
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Cards that belong to the user</returns>
+        [HttpGet("user/{id:guid}")]
+        [Logging]
+        [ProducesResponseType(typeof(ResponseModel), 200)]
+        public IActionResult GetUserCards(Guid id)
         {
-            var cards = CardCollection.Cards.Where(c => c.UserId == userId);
+            var cardModels = CardCollection.Cards
+                .Where(c => c.UserId == id)
+                .Select(c => c.To<Card, CardModel>());
 
-            if (cards == null)
-                return NotFound();
+            return Info(cardModels);
+        }
 
-            return Ok(cards);
+        /// <summary>
+        /// Get cards
+        /// </summary>
+        /// <returns>List of cards</returns>
+        [HttpGet]
+        [Logging]
+        [ProducesResponseType(typeof(ResponseModel), 200)]
+        public IActionResult GetCards()
+        {
+            return Info(CardCollection.Cards.Select(c => c.To<Card, CardModel>()));
+        }
+
+        /// <summary>
+        /// Create a card
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>A new card for the user</returns>
+        [Logging]
+        [ModelValidation]
+        [HttpPost]
+        [ProducesResponseType(typeof(ResponseModel), 200)]
+        [ProducesResponseType(typeof(ResponseModel), 400)]
+        public IActionResult CreateCard([FromBody] CardModel model)
+        {
+            if (CardCollection.Cards.Any(c => c.Id == model.Id))
+                return Error("Id is already in use");
+
+            if (CardCollection.Cards.Any(c => c.Pan == model.Pan))
+                return Error("Pan is already in use");
+
+            Card card = model.To<CardModel, Card>();
+
+            CardCollection.Cards.Add(card);
+
+            return Info(card.Id);
+        }
+
+        /// <summary>
+        /// Edit a card
+        /// </summary>
+        /// <returns></returns>
+        [ModelValidation]
+        [Logging]
+        [HttpPut("{id:guid}")]
+        [ProducesResponseType(typeof(ResponseModel), 200)]
+        [ProducesResponseType(typeof(ResponseModel), 400)]
+        public IActionResult EditCard(Guid id, [FromBody] CardEditModel model)
+        {
+            var card = CardCollection.Cards.FirstOrDefault(c => c.Id == id);
+
+            if (card == null)
+                return Error("Card not found", BusinessResult.NotFound);
+
+            card.Name = model.Name;
+
+            return Info();
+        }
+
+        /// <summary>
+        /// Delete a card by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Logging]
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType(typeof(ResponseModel), 200)]
+        [ProducesResponseType(typeof(ResponseModel), 400)]
+        public IActionResult DeleteCard(Guid id)
+        {
+            var card = CardCollection.Cards.FirstOrDefault(c => c.Id == id);
+
+            if (card == null)
+                return Error("Card not found", BusinessResult.NotFound);
+
+            CardCollection.Cards.Remove(card);
+
+            return Info();
         }
     }
 }

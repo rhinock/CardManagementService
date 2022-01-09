@@ -1,4 +1,5 @@
 ﻿# Card Management Service
+## L02
 
 - Create and set up a template project
 - Set up the configuration from file and environment variables
@@ -24,6 +25,21 @@ dotnet run --launch-profile "Development"
 $Env:ASPNETCORE_ENVIRONMENT = "Staging"
 dotnet run --launch-profile "Staging"
 
-$Env:ASPNETCORE_ENVIRONMENT = ""
 dotnet run --no-launch-profile
 ```
+
+## L03
+
+- Added controllers for:
+  - adding a card
+  - deleting a card
+  - getting a card or cards
+  - changing card's name
+- Configured swagger
+- Added filters for logging requests and responses which hides card's secret data:
+  - only 4 last digits of the pan is shown
+  - CVC is hidden completely
+- Added validation in one base model:
+  - Luhn algorithm
+  - card expiration date
+  - during adding (including exceptions)
