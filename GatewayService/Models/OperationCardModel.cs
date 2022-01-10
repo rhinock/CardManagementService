@@ -2,6 +2,8 @@
 using GatewayService.Attributes;
 
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace GatewayService.Models
 {
@@ -20,7 +22,18 @@ namespace GatewayService.Models
         [ExpireValidation(ErrorMessage = "Month or year is less than current month or year")]
         public Expire Expire { get; set; }
 
-        // TODO
-        // "CardHolder" :"Ivan Ivanov" - optional,
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.Append($"Cvc: {Regex.Replace(Cvc ?? "", @"[\d]", "*")}, ");
+            if (Pan != null)
+            {
+                stringBuilder.Append($"Pan: {Regex.Replace(Pan.Substring(0, Pan.Length - 4), @"\d", "*")}{Pan.Substring(Pan.Length - 4, 4)}, ");
+            }
+            stringBuilder.Append($"Expire: {Expire?.Month}/{Expire?.Year}, ");
+
+            return $"{{ {stringBuilder} }}";
+        }
     }
 }

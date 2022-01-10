@@ -10,48 +10,47 @@ using GatewayService.ResponseModels;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Threading.Tasks;
 
 namespace GatewayService.Attributes
 {
-    public class LoggingAttribute : ActionFilterAttribute
+    public class LoggingAttribute : Attribute, IAsyncActionFilter
     {
         private readonly ILogger _logger;
 
         public LoggingAttribute(Dictionary<string, ResourceConnection> connections)
         {
             _logger = connections["Logger"].Logger();
-    }
+        }
 
-    public override void OnActionExecuting(ActionExecutingContext context)
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            string message = string.Empty;
+            string @params = string.Empty;
             foreach (var item in context.ActionArguments)
             {
                 string value = item.Value?.ToString();
-                message = $"{message}, {item}={value}";
+                @params = $"{@params}, {item.Key}={value}";
             }
+            @params = @params.Trim(',').Trim();
 
-            string requestId = Guid.NewGuid().ToString("N").ToLower();
-            context.HttpContext.Request.Headers.Add("X-Request-Id", requestId);
+            var resultContext = await next();
+            string response = string.Empty;
 
-            message = $"Path: {context.HttpContext.Request.Path}; Request ID: {requestId}; Method: {context.HttpContext.Request.Method}; Params: {message}";
-            _logger.Info(message);
-        }
-
-        public override void OnActionExecuted(ActionExecutedContext context)
-        {
-            if (context.Result is ObjectResult result)
+            if (resultContext.Result is ObjectResult result)
             {
-                string message = string.Empty;
-                
                 if (result.Value is ResponseModel responseModel)
                 {
-                    message = responseModel.ToString();
+                    response = responseModel.ToString();
                 }
-
-                message = $"Path: {context.HttpContext.Request.Path}; Request ID: {context.HttpContext.Request.Headers["X-Request-Id"]}; Method: {context.HttpContext.Request.Method}; Response: {message}";
-                _logger.Info(message);
             }
+
+            string message =
+                $"Path: {context.HttpContext.Request.Path}; " +
+                $"Method: {context.HttpContext.Request.Method}; " +
+                $"Params: {@params}; " +
+                $"Response: {response}";
+
+            await _logger.Info(message);
         }
     }
 }
