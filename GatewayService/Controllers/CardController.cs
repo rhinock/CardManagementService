@@ -70,11 +70,6 @@ namespace GatewayService.Controllers
         [ProducesResponseType(typeof(ResponseModel), 200)]
         public async Task<ActionResult> GetCards()
         {
-            //return Info(_repository
-            //    .Query<Card>()
-            //    .ToList()
-            //    .Select(c => c.To<Card, CardModel>()));
-
             IEnumerable<Card> cards = await Repository.GetMany<Card>();
             IEnumerable<CardModel> cardModels = cards.ToList().Select(c => c.To<Card, CardModel>());
             return await InfoAsync(cardModels);
@@ -92,10 +87,6 @@ namespace GatewayService.Controllers
         [ProducesResponseType(typeof(ResponseModel), 400)]
         public async Task<ActionResult> CreateCard([FromBody] CardModel model)
         {
-            /*
-            if (cards.ToList().Any(c => c.Pan == model.Pan))
-                return await ErrorAsync("Pan is already in use");*/
-
             Card card = model.To<CardModel, Card>();
             await Repository.Create(card);
 
@@ -113,10 +104,6 @@ namespace GatewayService.Controllers
         [ProducesResponseType(typeof(ResponseModel), 400)]
         public async Task<ActionResult> EditCard(Guid id, [FromBody] CardEditModel model)
         {
-            //var card = _repository
-            //    .Query<Card>()
-            //    .FirstOrDefault(c => c.Id == id);
-
             var card = await Repository.Get<Card>(c => c.Id == id);
 
             if (card == null)
@@ -139,10 +126,6 @@ namespace GatewayService.Controllers
         [ProducesResponseType(typeof(ResponseModel), 400)]
         public async Task<ActionResult> DeleteCard(Guid id)
         {
-            //var card = _repository
-            //    .Query<Card>()
-            //    .FirstOrDefault(c => c.Id == id);
-
             var card = await Repository.Get<Card>(c => c.Id == id);
 
             if (card == null)
