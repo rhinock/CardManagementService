@@ -1,0 +1,140 @@
+version: "3.5"
+services:
+  gateway-service:
+    build:
+      context: .
+      args:
+        SERVICE_NAME: GatewayService
+    environment:
+      ConnectionResources__MainData__Value: "http://balancer-service; retryCount=6; retryStart=2; exceptionCount=5; breakDuration=60"
+      ConnectionResources__Logger__Value: "http://logger-service; minlevel=${LOG_LEVEL}; origin=gateway"
+      ConnectionResources__Auth__Value: "http://rights-service"
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+    ports:
+      - "${GATEWAY_SERVICE_PORT}:80"
+    depends_on:
+      - balancer-service
+      - logger-service
+      - rights-service
+    restart: unless-stopped
+  balancer-service:
+    build:
+      context: .
+      args:
+        SERVICE_NAME: BalancerService
+    environment:
+      ConnectionResources__MainData__Value: "Host=balancer-db;Port=5432;Database=${BALANCER_DB_NAME};Username=${BALANCER_DB_USER};Password=${BALANCER_DB_PASSWORD}"
+      ConnectionResources__Logger__Value: "http://logger-service; minlevel=${LOG_LEVEL}; origin=balancer"
+      Routes__0__ResourceConnection: "http://card-service/card"
+      Routes__1__ResourceConnection: "http://operation-service/operation"
+    depends_on:
+      - logger-service
+      - balancer-db
+    restart: unless-stopped
+  balancer-db:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_DB: "${BALANCER_DB_NAME}"
+      POSTGRES_USER: "${BALANCER_DB_USER}"
+      POSTGRES_PASSWORD: "${BALANCER_DB_PASSWORD}"
+    restart: unless-stopped
+    ports:
+      - "${BALANCER_DB_PORT}:5432"
+    volumes:
+      - "balancer-db:/var/lib/postgresql/data"
+  card-service:
+    build:
+      context: .
+      args:
+        SERVICE_NAME: CardDataService
+    environment:
+      ConnectionResources__MainData__Value: "Host=card-db;Port=5432;Database=${CARD_DB_NAME};Username=${CARD_DB_USER};Password=${CARD_DB_PASSWORD}"
+      ConnectionResources__MessageData__Value: "host=rabbit;port=5672;virtualHost=/;username=guest;password=guest"
+      ConnectionResources__Logger__Value: "http://logger-service; minlevel=${LOG_LEVEL}; origin=cardService"
+    depends_on:
+      - rabbit
+      - card-db
+      - logger-service
+    restart: unless-stopped
+  card-db:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_DB: "${CARD_DB_NAME}"
+      POSTGRES_USER: "${CARD_DB_USER}"
+      POSTGRES_PASSWORD: "${CARD_DB_PASSWORD}"
+    restart: unless-stopped
+    ports:
+      - "${CARD_DB_PORT}:5432"
+    volumes:
+      - "card-db:/var/lib/postgresql/data"
+  operation-service:
+    build:
+      context: .
+      args:
+        SERVICE_NAME: OperationDataService
+    environment:
+      ConnectionResources__MainData__Value: "Host=operation-db;Port=5432;Database=${OPERATION_DB_NAME};Username=${OPERATION_DB_USER};Password=${OPERATION_DB_PASSWORD}"
+      ConnectionResources__MessageData__Value: "host=rabbit;port=5672;virtualHost=/;username=guest;password=guest"
+      ConnectionResources__Logger__Value: "http://logger-service; minlevel=${LOG_LEVEL}; origin=operationService"
+    depends_on:
+      - rabbit
+      - operation-db
+      - logger-service
+    restart: unless-stopped
+  operation-db:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_DB: ${OPERATION_DB_NAME}
+      POSTGRES_USER: ${OPERATION_DB_USER}
+      POSTGRES_PASSWORD: ${OPERATION_DB_PASSWORD}
+    restart: unless-stopped
+    ports:
+      - "${OPERATION_DB_PORT}:5432"
+    volumes:
+      - "operation-db:/var/lib/postgresql/data"
+  rights-service:
+    build:
+      context: .
+      args:
+        SERVICE_NAME: RightsService
+    environment:
+      ConnectionResources__MainData__Value: "Host=rights-db;Port=5432;Database=${RIGHTS_DB_NAME};Username=${RIGHTS_DB_USER};Password=${RIGHTS_DB_PASSWORD}"
+      ConnectionResources__Logger__Value: "http://logger-service; minlevel=${LOG_LEVEL}; origin=rightsService"
+    depends_on:
+      - rights-db
+      - logger-service
+    restart: unless-stopped
+  rights-db:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_DB: ${RIGHTS_DB_NAME}
+      POSTGRES_USER: ${RIGHTS_DB_USER}
+      POSTGRES_PASSWORD: ${RIGHTS_DB_PASSWORD}
+    restart: unless-stopped
+    ports:
+      - "${RIGHTS_DB_PORT}:5432"
+    volumes:
+      - "rights-db:/var/lib/postgresql/data"
+  logger-service:
+    build:
+      context: .
+      args:
+        SERVICE_NAME: LoggerService
+    environment:
+      ConnectionResources__MainData__Value: "/logs"
+    volumes:
+      - "logs:/logs"
+    restart: unless-stopped
+  rabbit:
+    image: rabbitmq:3.9-management-alpine
+    ports:
+      # - "5672:5672"
+      - "15672:15672"
+    restart: unless-stopped
+
+volumes:
+  balancer-db:
+  card-db:
+  logs:
+  operation-db:
+  rights-db:

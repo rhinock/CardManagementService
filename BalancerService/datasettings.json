@@ -1,0 +1,12 @@
+{
+  "Routes": [
+    {
+      "ObjectName": "card",
+      "ResourceConnection": "http://localhost/cardDataService/card"
+    },
+    {
+      "ObjectName": "operation",
+      "ResourceConnection": "http://localhost/operationDataservice/operation"
+    }
+  ]
+}
