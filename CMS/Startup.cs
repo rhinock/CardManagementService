@@ -14,6 +14,8 @@ using CMS.Enums;
 using System.Text.Json;
 using CMS.ResponseModels;
 using CMS.Entities;
+using Microsoft.EntityFrameworkCore;
+using CMS.Repositories;
 
 namespace CMS
 {
@@ -37,10 +39,8 @@ namespace CMS
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddControllersWithViews(options =>
-            //{
-            //    options.Filters.Add<LoggingFilter>();
-            //});
+            services.AddDbContext<AppDbContext>(opt =>
+                opt.UseNpgsql(Configuration.GetConnectionString("Db")));
 
             services.AddControllersWithViews();
 
@@ -78,6 +78,8 @@ namespace CMS
 
                 c.AddSecurityRequirement(requirement);
             });
+
+            services.AddScoped<IRepository, Repository>();
         }
 
         /// <summary>

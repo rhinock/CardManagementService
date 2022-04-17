@@ -7,6 +7,8 @@ using CMS.Attributes;
 using CMS.ResponseModels;
 using CMS.Extensions;
 using CMS.Entities;
+using CMS.Repositories;
+using System.Threading.Tasks;
 
 namespace CMS.Controllers
 {
@@ -16,6 +18,15 @@ namespace CMS.Controllers
     [Route("api/card")]
     public class CardController : BaseController
     {
+        private readonly AppDbContext _appDbContext;
+        private readonly IRepository _repository;
+
+        public CardController(AppDbContext appDbContext, IRepository repository)
+        {
+            _appDbContext = appDbContext;
+            _repository = repository;
+        }
+
         /// <summary>
         /// Get a card by Id
         /// </summary>
@@ -27,7 +38,9 @@ namespace CMS.Controllers
         [ProducesResponseType(typeof(ResponseModel), 400)]
         public IActionResult GetCardById(Guid id)
         {
-            Card card = CardCollection.Cards.FirstOrDefault(c => c.Id == id);
+            Card card = _repository
+                .Query<Card>()
+                .FirstOrDefault(c => c.Id == id);
 
             if (card == null)
                 return Error("Card not found", BusinessResult.NotFound);
@@ -45,8 +58,10 @@ namespace CMS.Controllers
         [ProducesResponseType(typeof(ResponseModel), 200)]
         public IActionResult GetUserCards(Guid id)
         {
-            var cardModels = CardCollection.Cards
+            var cardModels = _repository
+                .Query<Card>()
                 .Where(c => c.UserId == id)
+                .ToList()
                 .Select(c => c.To<Card, CardModel>());
 
             return Info(cardModels);
@@ -61,7 +76,10 @@ namespace CMS.Controllers
         [ProducesResponseType(typeof(ResponseModel), 200)]
         public IActionResult GetCards()
         {
-            return Info(CardCollection.Cards.Select(c => c.To<Card, CardModel>()));
+            return Info(_repository
+                .Query<Card>()
+                .ToList()
+                .Select(c => c.To<Card, CardModel>()));
         }
 
         /// <summary>
@@ -74,19 +92,18 @@ namespace CMS.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ResponseModel), 200)]
         [ProducesResponseType(typeof(ResponseModel), 400)]
-        public IActionResult CreateCard([FromBody] CardModel model)
+        public async Task<ActionResult> CreateCard([FromBody] CardModel model)
         {
-            if (CardCollection.Cards.Any(c => c.Id == model.Id))
-                return Error("Id is already in use");
+            if (_repository.Query<Card>().Any(c => c.Id == model.Id))
+                return await ErrorAsync("Id is already in use");
 
-            if (CardCollection.Cards.Any(c => c.Pan == model.Pan))
-                return Error("Pan is already in use");
+            if (_repository.Query<Card>().Any(c => c.Pan == model.Pan))
+                return await ErrorAsync("Pan is already in use");
 
             Card card = model.To<CardModel, Card>();
+            await _repository.Create(card);
 
-            CardCollection.Cards.Add(card);
-
-            return Info(card.Id);
+            return await InfoAsync(card);
         }
 
         /// <summary>
@@ -100,12 +117,15 @@ namespace CMS.Controllers
         [ProducesResponseType(typeof(ResponseModel), 400)]
         public IActionResult EditCard(Guid id, [FromBody] CardEditModel model)
         {
-            var card = CardCollection.Cards.FirstOrDefault(c => c.Id == id);
+            var card = _repository
+                .Query<Card>()
+                .FirstOrDefault(c => c.Id == id);
 
             if (card == null)
                 return Error("Card not found", BusinessResult.NotFound);
 
             card.Name = model.Name;
+            _repository.Update(card);
 
             return Info();
         }
@@ -121,12 +141,14 @@ namespace CMS.Controllers
         [ProducesResponseType(typeof(ResponseModel), 400)]
         public IActionResult DeleteCard(Guid id)
         {
-            var card = CardCollection.Cards.FirstOrDefault(c => c.Id == id);
+            var card = _repository
+                .Query<Card>()
+                .FirstOrDefault(c => c.Id == id);
 
             if (card == null)
                 return Error("Card not found", BusinessResult.NotFound);
 
-            CardCollection.Cards.Remove(card);
+            _repository.Delete(card);
 
             return Info();
         }

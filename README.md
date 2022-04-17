@@ -43,3 +43,12 @@ dotnet run --no-launch-profile
   - Luhn algorithm
   - card expiration date
   - during adding (including exceptions)
+
+## L04, L05
+
+- Added 
+  - Entity Framework (EF) Core
+  - PostgreSQL DB
+  - Repository pattern for interaction with DB
+- Removed
+  - In-memory data
